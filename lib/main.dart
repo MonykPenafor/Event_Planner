@@ -1,9 +1,11 @@
+// import 'package:event_planner/pages/main_page.dart';
+import 'package:event_planner/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/event_page.dart';
-// import 'pages/login_page.dart';
+// import 'pages/event_page.dart';
+import 'pages/login_page.dart';
 
 // import 'pages/login_page.dart';
 
@@ -43,8 +45,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 45, 139, 167)),
         useMaterial3: true,
       ),
+      home: const MainPage()
       // home: LoginPage()
-      home: EventPage()
+      // home: EventPage()
+      // home: MainPage()
       
     );
   }

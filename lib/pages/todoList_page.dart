@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class EventPage extends StatelessWidget {
-  const EventPage
+class ToDoListPage extends StatelessWidget {
+  const ToDoListPage
 ({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Text("data");
+    return const Placeholder();
   }
 }

@@ -1,9 +1,9 @@
+import 'package:event_planner/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/app_user.dart';
 import '../services/user_services.dart';
-import 'event_page.dart';
-import 'signup_page.dart';
+// import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if(snapshot.hasData){
-            return const EventPage();
+            return const MainPage();
           } else{
             
             return Padding(
@@ -75,17 +75,17 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
             
-                  Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: const Text(
-                      'Forgot password?', 
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 21, 0, 70),
-                        fontWeight: FontWeight.w700
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.centerRight,
+                  //   padding: const EdgeInsets.only(top: 8.0),
+                  //   child: const Text(
+                  //     'Forgot password?', 
+                  //     style: TextStyle(
+                  //       color: Color.fromARGB(255, 21, 0, 70),
+                  //       fontWeight: FontWeight.w700
+                  //     ),
+                  //   ),
+                  // ),
             
                   const SizedBox(height: 25,),
             
@@ -100,7 +100,7 @@ class LoginPage extends StatelessWidget {
                         _appUser.password.toString());
         
                       if (await ok){
-                        Navigator.push(context, MaterialPageRoute(builder:(context) => const EventPage(),));
+                        Navigator.push(context, MaterialPageRoute(builder:(context) => const MainPage(),));
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -118,61 +118,61 @@ class LoginPage extends StatelessWidget {
             
                   const SizedBox(height: 20,),
         
-                  const Center(
-                    child: Text(
-                      'Or',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,                        
-                      ),
-                    ),
-                  ),
+                  // const Center(
+                  //   child: Text(
+                  //     'Or',
+                  //     style: TextStyle(
+                  //       fontSize: 20,
+                  //       fontWeight: FontWeight.w700,                        
+                  //     ),
+                  //   ),
+                  // ),
                                      
-                  const SizedBox(height: 20,),
+                  // const SizedBox(height: 20,),
                        
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      shape: LinearBorder.bottom()
-                    ),
-                    onPressed: (){},
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('assets/images/logo_google.png', height: 30,),
-                          const SizedBox(width: 15,),
-                          const Text(
-                            'Login with Google',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     minimumSize: const Size.fromHeight(50),
+                  //     shape: LinearBorder.bottom()
+                  //   ),
+                  //   onPressed: (){},
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(5.0),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Image.asset('assets/images/logo_google.png', height: 30,),
+                  //         const SizedBox(width: 15,),
+                  //         const Text(
+                  //           'Login with Google',
+                  //           style: TextStyle(
+                  //             fontWeight: FontWeight.w700,
+                  //             fontSize: 20,
+                  //           ),
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   
-                  Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text("Don't have an account?", style: TextStyle(color: Color.fromARGB(255, 34, 34, 34), fontWeight: FontWeight.bold,),),
+                  // Container(
+                  //   alignment: Alignment.centerRight,
+                  //   padding: const EdgeInsets.only(top: 8.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       const Text("Don't have an account?", style: TextStyle(color: Color.fromARGB(255, 34, 34, 34), fontWeight: FontWeight.bold,),),
             
-                        const SizedBox(width: 5,),
+                  //       const SizedBox(width: 5,),
             
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpPage()));
-                          },
-                          child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
-                        ),
-                    ],)
-                  ),
+                  //       InkWell(
+                  //         onTap: () {
+                  //           Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpPage()));
+                  //         },
+                  //         child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                  //       ),
+                  //   ],)
+                  // ),
             
             
             
