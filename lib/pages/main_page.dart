@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
         const EventListPage(),   //representa a posição zero da lista
         const ToDoListPage(),     
         const CalendarPage(),   
-        const AnalyticsPage(),     
+        AnalyticsPage(),     
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(
         height: 60,

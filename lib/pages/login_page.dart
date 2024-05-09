@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/app_user.dart';
 import '../services/user_services.dart';
-// import 'signup_page.dart';
+import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -13,6 +13,7 @@ class LoginPage extends StatelessWidget {
 
   final AppUser _appUser = AppUser();
 
+  final bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -58,34 +59,19 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 10,),
             
-                  TextFormField(
-                    obscureText: true,
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.fingerprint),
-                      label: Text("Password"),
-                      suffixIcon: Icon(Icons.remove_red_eye_outlined),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1.3),
-                        // borderRadius: BorderRadius.all(Radius.circular(5)),
+                  const PasswordField(),
+            
+                  Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: const Text(
+                      'Forgot password?', 
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 21, 0, 70),
+                        fontWeight: FontWeight.w700
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1.5)
-                      )
                     ),
                   ),
-            
-                  // Container(
-                  //   alignment: Alignment.centerRight,
-                  //   padding: const EdgeInsets.only(top: 8.0),
-                  //   child: const Text(
-                  //     'Forgot password?', 
-                  //     style: TextStyle(
-                  //       color: Color.fromARGB(255, 21, 0, 70),
-                  //       fontWeight: FontWeight.w700
-                  //     ),
-                  //   ),
-                  // ),
             
                   const SizedBox(height: 25,),
             
@@ -118,61 +104,61 @@ class LoginPage extends StatelessWidget {
             
                   const SizedBox(height: 20,),
         
-                  // const Center(
-                  //   child: Text(
-                  //     'Or',
-                  //     style: TextStyle(
-                  //       fontSize: 20,
-                  //       fontWeight: FontWeight.w700,                        
-                  //     ),
-                  //   ),
-                  // ),
+                  const Center(
+                    child: Text(
+                      'Or',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,                        
+                      ),
+                    ),
+                  ),
                                      
-                  // const SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                        
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     minimumSize: const Size.fromHeight(50),
-                  //     shape: LinearBorder.bottom()
-                  //   ),
-                  //   onPressed: (){},
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(5.0),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         Image.asset('assets/images/logo_google.png', height: 30,),
-                  //         const SizedBox(width: 15,),
-                  //         const Text(
-                  //           'Login with Google',
-                  //           style: TextStyle(
-                  //             fontWeight: FontWeight.w700,
-                  //             fontSize: 20,
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                      shape: LinearBorder.bottom()
+                    ),
+                    onPressed: (){},
+                    child: const Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Image.asset('assets/images/logo_google.png', height: 30,),
+                          // const SizedBox(width: 15,),
+                          Text(
+                            'Login with Google',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                   
-                  // Container(
-                  //   alignment: Alignment.centerRight,
-                  //   padding: const EdgeInsets.only(top: 8.0),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.end,
-                  //     children: [
-                  //       const Text("Don't have an account?", style: TextStyle(color: Color.fromARGB(255, 34, 34, 34), fontWeight: FontWeight.bold,),),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text("Don't have an account?", style: TextStyle(color: Color.fromARGB(255, 34, 34, 34), fontWeight: FontWeight.bold,),),
             
-                  //       const SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
             
-                  //       InkWell(
-                  //         onTap: () {
-                  //           Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpPage()));
-                  //         },
-                  //         child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
-                  //       ),
-                  //   ],)
-                  // ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpPage()));
+                          },
+                          child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                        ),
+                    ],)
+                  ),
             
             
             
@@ -182,5 +168,64 @@ class LoginPage extends StatelessWidget {
             );
           }
         }),);
+  }
+}
+
+
+
+
+
+
+
+
+
+class PasswordField extends StatefulWidget {
+  const PasswordField({super.key});
+
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  // Controller para o campo de texto
+  final TextEditingController _passwordController = TextEditingController();
+
+  // Estado para controlar a visibilidade do texto
+  bool _isObscured = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: _isObscured,  // Usar o estado para controlar o obscureText
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.fingerprint),
+        label: const Text("Password"),
+        suffixIcon: IconButton(
+          icon: Icon(
+            // Trocar o ícone baseado no estado de visibilidade
+            _isObscured ? Icons.visibility_off : Icons.visibility,
+          ),
+          onPressed: () {
+            // Alterar o estado quando o ícone é pressionado
+            setState(() {
+              _isObscured = !_isObscured;
+            });
+          },
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(width: 1.3),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(width: 1.5),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
   }
 }

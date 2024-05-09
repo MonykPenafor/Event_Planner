@@ -1,5 +1,6 @@
-import 'package:event_planner/pages/event_detail_page.dart';
 import 'package:flutter/material.dart';
+
+import 'event_page.dart';
 
 class EventListPage extends StatelessWidget {
   const EventListPage
@@ -10,7 +11,7 @@ class EventListPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder:(context) => const EventDetailPage(),));
+          Navigator.push(context, MaterialPageRoute(builder:(context) => const EventPage(),));
         },
         child: const Text(
           "+", 
