@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class BudgetPage extends StatelessWidget {
-  const BudgetPage ({super.key});
+class EventBudgetPage extends StatelessWidget {
+  const EventBudgetPage ({super.key});
 
   @override
   Widget build(BuildContext context) {

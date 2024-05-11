@@ -1,18 +1,18 @@
-import 'package:event_planner/pages/calendar_page.dart';
-import 'package:event_planner/pages/event_list_page.dart';
-import 'package:event_planner/pages/toDoList_page.dart';
+import 'package:event_planner/pages/home/calendar_page.dart';
+import 'package:event_planner/pages/home/events_page.dart';
+import 'package:event_planner/pages/home/toDoList_page.dart';
 import 'package:flutter/material.dart';
 
 import 'analytics_page.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class MainNavigationPage extends StatefulWidget {
+  const MainNavigationPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MainNavigationPage> createState() => _MainNavigationPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainNavigationPageState extends State<MainNavigationPage> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
       ),
       
       body: [
-        const EventListPage(),   //representa a posição zero da lista
+        const EventsPage(),   //representa a posição zero da lista
         const ToDoListPage(),     
         const CalendarPage(),   
         AnalyticsPage(),     

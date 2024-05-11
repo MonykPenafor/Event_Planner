@@ -46,15 +46,15 @@ class UserServices{
   }
 
 
-  Future<bool> signIn(String email, String password,) async {
-    try{
-      _auth.signInWithEmailAndPassword(email: email, password: password);
-      return Future.value(true);
-
-    } on FirebaseAuthException catch(e){
+  Future<bool> signIn(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return true;
+    } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
-      return Future.value(false);
+      return false;
     }
   }
+
     
 }

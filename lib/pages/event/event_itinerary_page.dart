@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ItineraryPage extends StatelessWidget {
-  const ItineraryPage({super.key});
+class EventItineraryPage extends StatelessWidget {
+  const EventItineraryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

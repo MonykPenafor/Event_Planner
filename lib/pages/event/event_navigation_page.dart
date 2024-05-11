@@ -1,27 +1,27 @@
-import 'package:event_planner/pages/budget_page.dart';
-import 'package:event_planner/pages/event_todolist_page.dart';
+import 'package:event_planner/pages/event/event_budget_page.dart';
+import 'package:event_planner/pages/event/event_details_page.dart';
+import 'package:event_planner/pages/event/event_toDoList_page.dart';
 import 'package:flutter/material.dart';
-import 'details_page.dart'; // Replace with your actual page
-import 'guests_page.dart'; // Replace with your actual page
-import 'itinerary_page.dart'; // Replace with your actual page
+import 'package:event_planner/pages/event/event_guests_page.dart'; 
+import 'package:event_planner/pages/event/event_itinerary_page.dart'; 
 
-class EventPage extends StatefulWidget {
-  const EventPage({Key? key}) : super(key: key);
+class EventNavigationPage extends StatefulWidget {
+  const EventNavigationPage({Key? key}) : super(key: key);
 
   @override
-  _EventPageState createState() => _EventPageState();
+  _EventNavigationPageState createState() => _EventNavigationPageState();
 }
 
-class _EventPageState extends State<EventPage> {
+class _EventNavigationPageState extends State<EventNavigationPage> {
   int _selectedIndex = 0; // The index of the selected item
 
   // List of widgets to display when a tab is selected
   final List<Widget> _pages = [
-    const DetailsPage(),
-    const GuestsPage(),
+    const EventDetailsPage(),
+    const EventGuestsPage(),
     const EventToDoList(),
-    const ItineraryPage(),
-    const BudgetPage(),
+    const EventItineraryPage(),
+    const EventBudgetPage(),
   ];
 
   // Function to build navigation items

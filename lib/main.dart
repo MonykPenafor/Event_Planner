@@ -1,8 +1,8 @@
-// import 'package:event_planner/pages/main_page.dart';
+// import 'package:event_planner/pages/home/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'pages/login_page.dart';
+import 'pages/login/login_page.dart';
 
 
 void main() async {

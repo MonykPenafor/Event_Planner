@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'event_page.dart';
+import '../event/event_navigation_page.dart';
 
-class EventListPage extends StatelessWidget {
-  const EventListPage
+class EventsPage extends StatelessWidget {
+  const EventsPage
 ({super.key});
 
   @override
@@ -11,7 +11,7 @@ class EventListPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder:(context) => const EventPage(),));
+          Navigator.push(context, MaterialPageRoute(builder:(context) => const EventNavigationPage(),));
         },
         child: const Text(
           "+", 

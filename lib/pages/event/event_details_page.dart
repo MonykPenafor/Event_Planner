@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class EventDetailPage extends StatefulWidget {
-  const EventDetailPage({super.key});
+class EventDetailsPage extends StatefulWidget {
+  const EventDetailsPage({super.key});
 
   @override
-  State<EventDetailPage> createState() => _EventDetailPageState();
+  State<EventDetailsPage> createState() => _EventDetailsPageState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage> {
+class _EventDetailsPageState extends State<EventDetailsPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _numberOfPeopleController = TextEditingController();
   final TextEditingController _venueController = TextEditingController();
@@ -31,9 +31,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Event Details'),
-      ),
       body: Form(
         key: _formKey,
         child: ListView(

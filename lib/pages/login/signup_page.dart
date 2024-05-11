@@ -1,5 +1,5 @@
 import 'package:event_planner/models/app_user.dart';
-import 'package:event_planner/pages/login_page.dart';
+import 'package:event_planner/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:event_planner/services/user_services.dart';
@@ -8,9 +8,9 @@ import 'package:event_planner/widgets/password_field.dart';
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
 
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   
   final AppUser _appUser = AppUser();
 
@@ -68,7 +68,7 @@ class SignUpPage extends StatelessWidget {
             const SizedBox(height: 15,),
 
             TextFormField(
-              controller: userNameController,
+              controller: _userNameController,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.person),
                 label: Text("Username"),
@@ -85,7 +85,7 @@ class SignUpPage extends StatelessWidget {
             const SizedBox(height: 10,),
 
             TextFormField(
-              controller: emailController,
+              controller: _emailController,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.email),
                 label: Text("E-mail"),
@@ -102,7 +102,7 @@ class SignUpPage extends StatelessWidget {
 
             PasswordField(
               onPasswordChanged: (value) {
-                _appUser.password = value;
+                _passwordController.text = value;
               },
             ),
 
@@ -116,9 +116,9 @@ class SignUpPage extends StatelessWidget {
                   onPressed:(){
 
                     //utilizando obj DTO
-                    _appUser.userName = userNameController.text;
-                    _appUser.email = emailController.text;
-                    _appUser.password = passwordController.text;
+                    _appUser.userName = _userNameController.text;
+                    _appUser.email = _emailController.text;
+                    _appUser.password = _passwordController.text;
                     // user.image = imageController.text
 
                     //criando instancia da classe userservice
@@ -171,13 +171,6 @@ class SignUpPage extends StatelessWidget {
               
             ),
 
-
-
-
-
-
-
-
           ],
         ),
       ),
@@ -185,3 +178,11 @@ class SignUpPage extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+

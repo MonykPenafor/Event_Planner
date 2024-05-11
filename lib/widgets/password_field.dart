@@ -37,6 +37,12 @@ class _PasswordFieldState extends State<PasswordField> {
             });
           },
         ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(width: 1.2)
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(width: 1.7)
+        ),
       ),
     );
   }

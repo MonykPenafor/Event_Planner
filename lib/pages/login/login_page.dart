@@ -1,4 +1,5 @@
-import 'package:event_planner/pages/main_page.dart';
+import 'package:event_planner/pages/home/main_navigation_page.dart';
+import 'package:event_planner/widgets/custom_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:event_planner/models/app_user.dart';
@@ -23,7 +24,7 @@ class LoginPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if(snapshot.hasData){
-            return const MainPage();
+            return const MainNavigationPage();
           } else{
             
             return Padding(
@@ -60,7 +61,7 @@ class LoginPage extends StatelessWidget {
             
                   PasswordField(
                     onPasswordChanged: (value) {
-                      _appUser.password = value; // Update this line
+                      _passwordController.text = value; // Update this line
                     },
                   ),
             
@@ -83,13 +84,16 @@ class LoginPage extends StatelessWidget {
                       UserServices userServices = UserServices();
                       _appUser.email = _emailController.text;
                       _appUser.password = _passwordController.text;
-        
+
                       Future<bool> ok = userServices.signIn(
                         _appUser.email.toString(), 
                         _appUser.password.toString());
         
                       if (await ok){
-                        Navigator.push(context, MaterialPageRoute(builder:(context) => const MainPage(),));
+                        Navigator.push(context, MaterialPageRoute(builder:(context) => const MainNavigationPage(),));
+                      }
+                      else {
+                        CustomSnackBar.show(context, 'Invalid username or password', const EdgeInsets.all(16.0));
                       }
                     },
                     style: ElevatedButton.styleFrom(
