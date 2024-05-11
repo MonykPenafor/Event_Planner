@@ -17,11 +17,11 @@ class _EventPageState extends State<EventPage> {
 
   // List of widgets to display when a tab is selected
   final List<Widget> _pages = [
-    DetailsPage(),
-    GuestsPage(),
-    EventToDoList(),
-    ItineraryPage(),
-    BudgetPage(),
+    const DetailsPage(),
+    const GuestsPage(),
+    const EventToDoList(),
+    const ItineraryPage(),
+    const BudgetPage(),
   ];
 
   // Function to build navigation items
@@ -33,7 +33,7 @@ class _EventPageState extends State<EventPage> {
         });
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Text(label,
           style: TextStyle(
             color: _selectedIndex == index ? Colors.blue : Colors.black,
@@ -51,7 +51,7 @@ class _EventPageState extends State<EventPage> {
         title: const Text("Event Details"),
         // Custom top navigation bar within the AppBar
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[

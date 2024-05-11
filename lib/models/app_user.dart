@@ -6,18 +6,18 @@ class AppUser{
   String? userName;
   String? email;
   String? password;
-  String? phone;
-  String? image;
-  String? role;
+  // String? phone;
+  // String? image;
+  // String? role;
   
   AppUser({
     this.id, 
     this.userName, 
     this.email, 
     this.password, 
-    this.phone,
-    this.image, 
-    this.role,
+    // this.phone,
+    // this.image, 
+    // this.role,
   });
 
   Map<String, dynamic> toJson(){ 
@@ -26,9 +26,9 @@ class AppUser{
       "userName": userName,
       "email": email,
       "password": password,
-      "phone": phone,
-      "image": image,
-      "role": role,
+      // "phone": phone,
+      // "image": image,
+      // "role": role,
     };
   }
 }

@@ -7,39 +7,42 @@ import '../models/app_user.dart';
 
 class UserServices{
 
-  //widget para autenticação de usuario
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // for managing user authentication and data storage operations.
+  final FirebaseAuth _auth = FirebaseAuth.instance;           
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;   
 
-  //widget para persistencia de dados do usuario
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AppUser? _appUser = AppUser(); 
 
-  final AppUser? _appUser = AppUser(); //'?' nullsafety pq nao vai ser inicializada agora e sim dinamicamente
+  CollectionReference get _collectionRef => _firestore.collection("users");    // Provides a reference to the 'users' collection in Firebase.
+  DocumentReference get _docRef => _firestore.doc('users/${_appUser!.id}');   // Provides a reference to a specific user document using the user's ID.
 
-  // metodo do tipo get para obter uma referencia da coleção no firebase
-  CollectionReference get _collectionRef => _firestore.collection("users");
 
-  //metodo para obter a referencia do documento no firebase
-  DocumentReference get _docRef => _firestore.doc('users/${_appUser!.id}');
+  signUp(String userName, String email, String password) async { 
 
-  //metodo de registro de usuario no firebase
-  signUp(String userName, String email, String password, String phone,) async { //DateTime bday,String image
-    User? user = (await  _auth.createUserWithEmailAndPassword(
-      email: email, 
-      password: password)).user;      
+    try {
+      User? user = (await  _auth.createUserWithEmailAndPassword(
+        email: email, 
+        password: password)).user;      
 
-    _appUser!.id = user!.uid;
-    _appUser.email = user.email;
-    _appUser.userName = userName; 
-    _appUser.phone = phone;
+      _appUser!.id = user!.uid;
+      _appUser.email = user.email;
+      _appUser.userName = userName; 
 
-    saveData();
+      saveData();
 
+      print('User created successfully'); 
+
+    } 
+    catch (e) 
+    {
+      print('Error creating user: $e'); // Adicionando um print para exibir o erro caso ocorra algum problema
+    }
   }
 
-  //metodo para persistir dados do usuario no firebase firestore
+
+  //save user data into firebase cloud firestore
   saveData() {
     _docRef.set(_appUser!.toJson());
-
   }
 
 
@@ -52,25 +55,6 @@ class UserServices{
       debugPrint(e.toString());
       return Future.value(false);
     }
-
-
-
   }
     
-    
 }
-
-
-
-
-
-
-  // signUp(String userName, String email, String password, String phone) async { 
-  //   try {
-  //     await _auth.createUserWithEmailAndPassword(email: email, password: password);
-  //     print('User created successfully'); // Adicionando um print para saber se o usuário foi criado com sucesso
-  //   } catch (e) {
-  //     print('Error creating user: $e'); // Adicionando um print para exibir o erro caso ocorra algum problema
-  //   }
-  // }
-

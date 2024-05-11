@@ -1,8 +1,9 @@
 import 'package:event_planner/pages/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../models/app_user.dart';
-import '../services/user_services.dart';
+import 'package:event_planner/models/app_user.dart';
+import 'package:event_planner/services/user_services.dart';
+import 'package:event_planner/widgets/password_field.dart';
 import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -12,8 +13,6 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   final AppUser _appUser = AppUser();
-
-  final bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,11 @@ class LoginPage extends StatelessWidget {
 
                   const SizedBox(height: 10,),
             
-                  const PasswordField(),
+                  PasswordField(
+                    onPasswordChanged: (value) {
+                      _appUser.password = value; // Update this line
+                    },
+                  ),
             
                   Container(
                     alignment: Alignment.centerRight,
@@ -104,42 +107,6 @@ class LoginPage extends StatelessWidget {
             
                   const SizedBox(height: 20,),
         
-                  const Center(
-                    child: Text(
-                      'Or',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,                        
-                      ),
-                    ),
-                  ),
-                                     
-                  const SizedBox(height: 20,),
-                       
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      shape: LinearBorder.bottom()
-                    ),
-                    onPressed: (){},
-                    child: const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Image.asset('assets/images/logo_google.png', height: 30,),
-                          // const SizedBox(width: 15,),
-                          Text(
-                            'Login with Google',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
                   
                   Container(
                     alignment: Alignment.centerRight,
@@ -153,9 +120,9 @@ class LoginPage extends StatelessWidget {
             
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpPage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
                           },
-                          child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                          child: const Text('Register Now', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
                         ),
                     ],)
                   ),
@@ -172,60 +139,3 @@ class LoginPage extends StatelessWidget {
 }
 
 
-
-
-
-
-
-
-
-class PasswordField extends StatefulWidget {
-  const PasswordField({super.key});
-
-  @override
-  _PasswordFieldState createState() => _PasswordFieldState();
-}
-
-class _PasswordFieldState extends State<PasswordField> {
-  // Controller para o campo de texto
-  final TextEditingController _passwordController = TextEditingController();
-
-  // Estado para controlar a visibilidade do texto
-  bool _isObscured = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _passwordController,
-      obscureText: _isObscured,  // Usar o estado para controlar o obscureText
-      decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.fingerprint),
-        label: const Text("Password"),
-        suffixIcon: IconButton(
-          icon: Icon(
-            // Trocar o ícone baseado no estado de visibilidade
-            _isObscured ? Icons.visibility_off : Icons.visibility,
-          ),
-          onPressed: () {
-            // Alterar o estado quando o ícone é pressionado
-            setState(() {
-              _isObscured = !_isObscured;
-            });
-          },
-        ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(width: 1.3),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(width: 1.5),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    super.dispose();
-  }
-}
