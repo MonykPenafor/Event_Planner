@@ -49,9 +49,10 @@ class _EventNavigationPageState extends State<EventNavigationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Event Details"),
+        
         // Custom top navigation bar within the AppBar
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(25),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[

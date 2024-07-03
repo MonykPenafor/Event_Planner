@@ -1,5 +1,5 @@
 import 'package:event_planner/pages/home/main_navigation_page.dart';
-import 'package:event_planner/widgets/custom_snackbar.dart';
+import 'package:event_planner/components/custom_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:event_planner/models/app_user.dart';
@@ -19,7 +19,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      // streambuilder is used to keep the user loged, it goes straight to the main page
+      // streambuilder is used to keep the user logged, it goes straight to the main page
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
@@ -35,7 +35,7 @@ class LoginPage extends StatelessWidget {
                 children: [
             
                   const Text(
-                    'Log in to begin planning!', 
+                    'LOG IN', 
                     style: TextStyle(
                       color: Color.fromARGB(255, 0, 16, 34), 
                       fontSize: 25, fontWeight: 
@@ -90,10 +90,22 @@ class LoginPage extends StatelessWidget {
                         _appUser.password.toString());
         
                       if (await ok){
+
+                        // FirebaseAuth.instance.currentUser!.displayName!.then((userName) {
+                        //   Provider.of<UserProvider>(context).setUserName(userName);
+                        // });
+                        CustomSnackBar.show(
+                          context, 
+                          'User Logged', 
+                          Color.fromARGB(255, 84, 168, 6));
+
                         Navigator.push(context, MaterialPageRoute(builder:(context) => const MainNavigationPage(),));
                       }
                       else {
-                        CustomSnackBar.show(context, 'Invalid username or password', const EdgeInsets.all(16.0));
+                        CustomSnackBar.show(
+                          context, 
+                          'Invalid username or password', 
+                          Colors.black);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -126,14 +138,10 @@ class LoginPage extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
                           },
-                          child: const Text('Register Now', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                          child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
                         ),
                     ],)
                   ),
-            
-            
-            
-            
                 ],
               ),
             );

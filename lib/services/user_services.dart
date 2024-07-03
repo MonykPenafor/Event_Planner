@@ -14,6 +14,7 @@ class UserServices{
   final AppUser? _appUser = AppUser(); 
 
   CollectionReference get _collectionRef => _firestore.collection("users");    // Provides a reference to the 'users' collection in Firebase.
+
   DocumentReference get _docRef => _firestore.doc('users/${_appUser!.id}');   // Provides a reference to a specific user document using the user's ID.
 
 
@@ -30,12 +31,17 @@ class UserServices{
 
       saveData();
 
-      print('User created successfully'); 
-
+        return {
+        'success': true,
+        'message': 'User created successfully'
+      }; 
     } 
     catch (e) 
     {
-      print('Error creating user: $e'); // Adicionando um print para exibir o erro caso ocorra algum problema
+       return {
+        'success': false,
+        'message': 'Error creating user: $e'
+      };
     }
   }
 
@@ -56,5 +62,7 @@ class UserServices{
     }
   }
 
-    
+
+
+  
 }

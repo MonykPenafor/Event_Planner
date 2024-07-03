@@ -17,13 +17,8 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("data"),
-
-      ),
-      
       body: [
-        const EventsPage(),   //representa a posição zero da lista
+        const EventsPage(),   
         const ToDoListPage(),     
         const CalendarPage(),   
         AnalyticsPage(),     
@@ -37,10 +32,6 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
           });
         },
         destinations:  const [
-          // NavigationDestination(
-          //   icon: Image.asset('assets/icons/star.png'),
-          //   label: 'Events',
-          // ),
           NavigationDestination(
             icon: Icon(Icons.event_note_rounded),
             label: 'Events',

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:event_planner/services/user_services.dart';
 import 'package:event_planner/widgets/password_field.dart';
 
+import '../../components/custom_snackbar.dart';
+
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
 
@@ -21,49 +23,10 @@ class SignUpPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(30),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
-            // ClipRRect(
-            //   borderRadius: BorderRadius.circular(10),
-            //   child: Image.asset(
-            //     'assets/images/capa.png', 
-            //     height: 100, 
-            //     width: 150, 
-            //     fit: BoxFit.fill,)
-            // ),
-
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('segunda tela', style: TextStyle(color:  Color.fromARGB(255, 41, 41, 41), fontSize: 20, fontWeight: FontWeight.bold),),
-
-                    Text('Cardápio', style: TextStyle(color: Color.fromARGB(255, 82, 164, 202), fontSize: 15),),
-                  ],
-
-                ),
-
-                // const SizedBox(width: 80,),
-
-                // Column(
-                //   children: [
-                //     ClipOval(
-                //       child: Image.asset(
-                //         'assets/images/foto_perfil.jpg',
-                //         height: 50, 
-                //         width: 50, 
-                //         fit: BoxFit.fill,)
-                //     ),
-                //   ],
-
-                // ),
-              ],
-            ),
-
-
+            const Text('SIGN UP', style: TextStyle(color:  Color.fromARGB(255, 41, 41, 41), fontSize: 20, fontWeight: FontWeight.bold),),
 
             const SizedBox(height: 15,),
 
@@ -113,24 +76,38 @@ class SignUpPage extends StatelessWidget {
                   height: 30,
                 ),
                 ElevatedButton(
-                  onPressed:(){
+                  onPressed:() async {
 
-                    //utilizando obj DTO
+                    //using DTO
                     _appUser.userName = _userNameController.text;
                     _appUser.email = _emailController.text;
                     _appUser.password = _passwordController.text;
                     // user.image = imageController.text
 
-                    //criando instancia da classe userservice
                     UserServices userServices = UserServices();
 
-                    //utilizando instancia da classe user service
-                    userServices.signUp(
+                    var result = await userServices.signUp(
                       _appUser.userName.toString(), 
                       _appUser.email.toString(), 
                       _appUser.password.toString());
 
-                    Navigator.pop(context);
+                    if (result['success']) {
+                     CustomSnackBar.show(
+                        context,
+                        result['message'],
+                        const Color.fromARGB(255, 88, 155, 0)
+                      );
+                      
+                      Navigator.pop(context);
+
+                    }else {
+                      CustomSnackBar.show(
+                        context,
+                        result['message'],
+                        const Color.fromARGB(255, 133, 0, 0)
+                      );
+                    }
+
                   },
                   style: ElevatedButton.styleFrom(
                     elevation: 1.5,
@@ -165,7 +142,7 @@ class SignUpPage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                     },
-                    child: const Text('Login Now', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                    child: const Text('Login', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
                   ),
               ],)
               

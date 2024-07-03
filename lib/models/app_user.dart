@@ -7,7 +7,6 @@ class AppUser{
   String? email;
   String? password;
   // String? phone;
-  // String? image;
   // String? role;
   
   AppUser({
@@ -16,7 +15,6 @@ class AppUser{
     this.email, 
     this.password, 
     // this.phone,
-    // this.image, 
     // this.role,
   });
 
@@ -27,7 +25,6 @@ class AppUser{
       "email": email,
       "password": password,
       // "phone": phone,
-      // "image": image,
       // "role": role,
     };
   }
