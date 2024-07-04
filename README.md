@@ -54,6 +54,35 @@ In VS Code:
 
 
 
+PS C:\~\event_planner> gradle init                                                                                           
+Select all defaults
+                 
+BUILD SUCCESSFUL in 1m 24s
+
+PS C:\~\event_planner> gradle wrapper                                                                               
+BUILD SUCCESSFUL in 6s
+
+PS C:\~\event_planner> .\gradlew.bat --version                                               
+
+>Gradle 8.5
+
+>Kotlin:       1.9.20
+
+>Groovy:       3.0.17
+
+>Ant:          Apache Ant(TM) version 1.10.13 compiled on January 4 2023
+JVM:          21.0.2 (Oracle Corporation 21.0.2+13-LTS-58)
+OS:           Windows 11 10.0 amd64
+
+PS C:\~\event_planner> .\gradlew.bat build
+
+Root project 'event_planner'
+
+BUILD SUCCESSFUL in 790ms
+
+
+
+
 
 
 
