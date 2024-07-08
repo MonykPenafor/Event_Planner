@@ -61,7 +61,7 @@ class LoginPage extends StatelessWidget {
             
                   PasswordField(
                     onPasswordChanged: (value) {
-                      _passwordController.text = value; // Update this line
+                      _passwordController.text = value; 
                     },
                   ),
             
@@ -85,26 +85,26 @@ class LoginPage extends StatelessWidget {
                       _appUser.email = _emailController.text;
                       _appUser.password = _passwordController.text;
 
-                      Future<bool> ok = userServices.signIn(
+                      var result = await userServices.signIn(
                         _appUser.email.toString(), 
                         _appUser.password.toString());
         
-                      if (await ok){
+                      if (result['success']){
 
                         // FirebaseAuth.instance.currentUser!.displayName!.then((userName) {
                         //   Provider.of<UserProvider>(context).setUserName(userName);
                         // });
                         CustomSnackBar.show(
                           context, 
-                          'User Logged', 
-                          Color.fromARGB(255, 84, 168, 6));
+                          result['message'], 
+                          const Color.fromARGB(255, 84, 168, 6));
 
                         Navigator.push(context, MaterialPageRoute(builder:(context) => const MainNavigationPage(),));
                       }
                       else {
                         CustomSnackBar.show(
                           context, 
-                          'Invalid username or password', 
+                          result['message'],
                           Colors.black);
                       }
                     },

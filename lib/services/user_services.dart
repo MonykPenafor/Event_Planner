@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/app_user.dart';
 
-class UserServices{
+class UserServices extends ChangeNotifier{
 
   // for managing user authentication and data storage operations.
   final FirebaseAuth _auth = FirebaseAuth.instance;           
@@ -18,7 +18,7 @@ class UserServices{
   DocumentReference get _docRef => _firestore.doc('users/${_appUser!.id}');   // Provides a reference to a specific user document using the user's ID.
 
 
-  signUp(String userName, String email, String password) async { 
+  Future<Map<String, dynamic>> signUp(String userName, String email, String password) async { 
 
     try {
       User? user = (await  _auth.createUserWithEmailAndPassword(
@@ -29,36 +29,60 @@ class UserServices{
       _appUser.email = user.email;
       _appUser.userName = userName; 
 
-      saveData();
+      await saveData();
 
         return {
         'success': true,
         'message': 'User created successfully'
       }; 
-    } 
-    catch (e) 
-    {
-       return {
+    } on FirebaseAuthException catch (error) {
+      String message;
+      if(error.code == 'invalid-email'){
+        message = 'Invalid Email';
+      }else if(error.code == 'weak-password'){
+        message = 'The password is too weak, it must have a least 6 characters';
+      }else if(error.code == 'email-already-in-use'){
+        message = 'This email is registered already';
+      }else {
+        message = 'Error: ${error.message}';
+      }
+
+      return {
         'success': false,
-        'message': 'Error creating user: $e'
+        'message': message,
       };
     }
   }
 
 
   //save user data into firebase cloud firestore
-  saveData() {
-    _docRef.set(_appUser!.toJson());
+  Future<void> saveData() async {
+    await _docRef.set(_appUser!.toJson());
   }
 
 
-  Future<bool> signIn(String email, String password) async {
+  Future<Map<String, dynamic>> signIn(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      return true;
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      return false;
+      return {
+        'success': true,
+        'message': 'User Logged'
+      }; 
+    } on FirebaseAuthException catch (error) {
+      String message;
+      if(error.code == 'invalid-email'){
+        message = 'Invalid Email';
+      }else if(error.code == 'wrong-password'){
+        message = 'Wrong Password';
+      }else if(error.code == 'user-disabled'){
+        message = 'This user is disabled';
+      }else {
+        message = 'Error: ${error.message}';
+      }
+return {
+        'success': false,
+        'message': message,
+      }; 
     }
   }
 

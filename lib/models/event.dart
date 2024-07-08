@@ -1,26 +1,38 @@
 // event DTO
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Event{
 
   String? id;
   String? title;
-  String? date;
-  String? inCharge;
+  String? userId;
   
   Event({
     this.id, 
     this.title, 
-    this.date,
-    this.inCharge, 
+    this.userId, 
   });
+
+
+
+  // Factory method to create an Event from a Firestore DocumentSnapshot
+  factory Event.fromDocument(DocumentSnapshot doc) {
+    return Event(
+      id: doc.id, // Document ID
+      title: doc['title'], // 'title' field in the document
+      userId: doc['userId'], // 'userId' field in the document
+    );
+  }
+
+
 
   Map<String, dynamic> toJson(){ 
     return {
       "id": id,
-      "Title": title,
-      "email": date,
-      "In Charge": inCharge,
+      "title": title,
+      "userId": userId,
     };
   }
 }

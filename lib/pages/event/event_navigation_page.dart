@@ -58,7 +58,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> {
             children: <Widget>[
               _buildNavItem(label: "Details", index: 0),
               _buildNavItem(label: "Guests", index: 1),
-              _buildNavItem(label: "ToDo List", index: 2),
+              _buildNavItem(label: "To Do List", index: 2),
               _buildNavItem(label: "Itinerary", index: 3),
               _buildNavItem(label: "Budget", index: 4),
             ],
