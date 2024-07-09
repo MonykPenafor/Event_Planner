@@ -4,6 +4,7 @@ import 'package:event_planner/pages/home/toDoList_page.dart';
 import 'package:flutter/material.dart';
 
 import 'analytics_page.dart';
+import 'profile_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
   const MainNavigationPage({super.key});
@@ -22,6 +23,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
         const ToDoListPage(),     
         const CalendarPage(),   
         AnalyticsPage(),     
+        ProfilePage(userName: 'hey',profileImageUrl: 'hey',userBio: "hey",userEmail: "hey",),
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(
         height: 60,
@@ -47,6 +49,10 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
           NavigationDestination(
             icon: Icon(Icons.analytics_outlined),
             label: 'Analytics',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outlined),
+            label: 'Profile',
           ),
         ],
       ),

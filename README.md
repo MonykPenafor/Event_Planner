@@ -59,7 +59,7 @@ Select all defaults
                  
 BUILD SUCCESSFUL in 1m 24s
 
-PS C:\~\event_planner> gradle wrapper                                                                               
+PS C:\~\event_planner> gradle wrapper                                    
 BUILD SUCCESSFUL in 6s
 
 PS C:\~\event_planner> .\gradlew.bat --version                                               
@@ -83,6 +83,6 @@ BUILD SUCCESSFUL in 790ms
 
 
 
-
+to use the where when fetching the events from a specific user, i had to create indexes on the firestora database on forebase, i created one for the collection events, fields: userId and title.
 
 

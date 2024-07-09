@@ -1,7 +1,9 @@
 // import 'package:event_planner/pages/home/main_page.dart';
+import 'package:event_planner/services/user_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'pages/login/login_page.dart';
 
 
@@ -34,13 +36,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Event Planner',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 45, 139, 167)),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => UserServices(), lazy: false,)],
+      
+      child: MaterialApp(
+        title: 'Event Planner',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 45, 139, 167)),
+          useMaterial3: true,
+        ),
+        home: LoginPage()      
       ),
-      home: LoginPage()      
     );
   }
 }

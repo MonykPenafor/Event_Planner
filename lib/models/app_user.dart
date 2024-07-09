@@ -1,5 +1,7 @@
 // user DTO
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AppUser{
 
   String? id;
@@ -28,4 +30,21 @@ class AppUser{
       // "role": role,
     };
   }
+
+AppUser.fromJson(DocumentSnapshot doc){
+  id = doc.id;
+  userName = doc.get('userName');
+  email = doc.get('email');
+  
+
+}
+
+
+
+
+
+
+
+
+
 }
