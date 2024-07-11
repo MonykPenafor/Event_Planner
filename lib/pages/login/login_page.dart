@@ -2,9 +2,9 @@ import 'package:event_planner/pages/home/main_navigation_page.dart';
 import 'package:event_planner/components/custom_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:event_planner/models/app_user.dart';
 import 'package:event_planner/services/user_services.dart';
 import 'package:event_planner/widgets/password_field.dart';
+import 'package:provider/provider.dart';
 import 'signup_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -13,36 +13,28 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  final AppUser _appUser = AppUser();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      // streambuilder is used to keep the user logged, it goes straight to the main page
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             return const MainNavigationPage();
-          } else{
-            
+          } else {
             return Padding(
               padding: const EdgeInsets.only(top: 70, bottom: 20, left: 70, right: 70),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                
                 children: [
-            
                   const Text(
-                    'LOG IN', 
+                    'LOG IN',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 0, 16, 34), 
-                      fontSize: 25, fontWeight: 
-                      FontWeight.bold),),
-            
+                        color: Color.fromARGB(255, 0, 16, 34),
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 25,),
-
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
@@ -56,56 +48,46 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10,),
-            
                   PasswordField(
                     onPasswordChanged: (value) {
-                      _passwordController.text = value; 
+                      _passwordController.text = value;
                     },
                   ),
-            
                   Container(
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(top: 8.0),
                     child: const Text(
-                      'Forgot password?', 
+                      'Forgot password?',
                       style: TextStyle(
-                        color: Color.fromARGB(255, 21, 0, 70),
-                        fontWeight: FontWeight.w700
+                          color: Color.fromARGB(255, 21, 0, 70),
+                          fontWeight: FontWeight.w700
                       ),
                     ),
                   ),
-            
                   const SizedBox(height: 25,),
-            
                   ElevatedButton(
-                    onPressed:() async {
-                      UserServices userServices = UserServices();
-                      _appUser.email = _emailController.text;
-                      _appUser.password = _passwordController.text;
+                    onPressed: () async {
+                      UserServices userServices = Provider.of<UserServices>(context, listen: false);
 
                       var result = await userServices.signIn(
-                        _appUser.email.toString(), 
-                        _appUser.password.toString());
-        
-                      if (result['success']){
+                        _emailController.text,
+                        _passwordController.text,
+                      );
 
-                        // FirebaseAuth.instance.currentUser!.displayName!.then((userName) {
-                        //   Provider.of<UserProvider>(context).setUserName(userName);
-                        // });
+                      if (result['success']) {
                         CustomSnackBar.show(
-                          context, 
-                          result['message'], 
-                          const Color.fromARGB(255, 84, 168, 6));
-
-                        Navigator.push(context, MaterialPageRoute(builder:(context) => const MainNavigationPage(),));
-                      }
-                      else {
-                        CustomSnackBar.show(
-                          context, 
+                          context,
                           result['message'],
-                          Colors.black);
+                          const Color.fromARGB(255, 84, 168, 6)
+                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const MainNavigationPage()));
+                      } else {
+                        CustomSnackBar.show(
+                          context,
+                          result['message'],
+                          Colors.black
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -120,34 +102,42 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ),
-            
                   const SizedBox(height: 20,),
-        
-                  
                   Container(
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const Text("Don't have an account?", style: TextStyle(color: Color.fromARGB(255, 34, 34, 34), fontWeight: FontWeight.bold,),),
-            
+                        const Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 34, 34, 34),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         const SizedBox(width: 5,),
-            
                         InkWell(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
                           },
-                          child: const Text('Register', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 6, 135, 221),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                    ],)
+                      ],
+                    ),
                   ),
                 ],
               ),
             );
           }
-        }),);
+        },
+      ),
+    );
   }
 }
-
-

@@ -36,13 +36,7 @@ AppUser.fromJson(DocumentSnapshot doc){
   userName = doc.get('userName');
   email = doc.get('email');
   
-
-}
-
-
-
-
-
+  }
 
 
 

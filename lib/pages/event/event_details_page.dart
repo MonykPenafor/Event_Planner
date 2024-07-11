@@ -1,3 +1,4 @@
+import 'package:event_planner/pages/home/main_navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +55,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
          // Navigate to EventListPage
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EventsPage()),
+            MaterialPageRoute(builder: (context) => MainNavigationPage()),
           );
 
         } else {

@@ -36,6 +36,7 @@ class UserServices extends ChangeNotifier {
       await saveData();
 
       return {'success': true, 'message': 'User created successfully'};
+
     } on FirebaseAuthException catch (error) {
       String message;
       if (error.code == 'invalid-email') {
@@ -57,8 +58,11 @@ class UserServices extends ChangeNotifier {
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      User? user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
+      await _loadCurrentUser(user: user);
+
       return {'success': true, 'message': 'User Logged'};
+
     } on FirebaseAuthException catch (error) {
       String message;
       if (error.code == 'invalid-email') {
@@ -82,16 +86,15 @@ class UserServices extends ChangeNotifier {
     await _docRef.set(appUser!.toJson());
   }
 
-   _loadCurrentUser({User? user}) async {
+   Future<void> _loadCurrentUser({User? user}) async {
     User? currentUser = user ?? _auth.currentUser;
     if (currentUser != null) {
-      DocumentSnapshot docUser =
-          await _firestore.collection('users').doc(currentUser!.uid).get();
+      DocumentSnapshot docUser = await _firestore.collection('users').doc(currentUser.uid).get();
       appUser = AppUser.fromJson(docUser);
-      notifyListeners();
-    } else {
-      appUser = AppUser(
-          email: 'hey@gmail.com', id: currentUser!.uid, userName: 'hey');
-    }
+    notifyListeners();
+    } 
   }
+
+
+  
 }

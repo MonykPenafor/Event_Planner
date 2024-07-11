@@ -23,7 +23,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
         const ToDoListPage(),     
         const CalendarPage(),   
         AnalyticsPage(),     
-        ProfilePage(userName: 'hey',profileImageUrl: 'hey',userBio: "hey",userEmail: "hey",),
+        ProfilePage(),
       ][_selectedIndex],
       bottomNavigationBar: NavigationBar(
         height: 60,
