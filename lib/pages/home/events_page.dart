@@ -11,38 +11,52 @@ class EventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-User? currentUser = FirebaseAuth.instance.currentUser;
+    User? currentUser = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      body: StreamBuilder(
-          stream: _eventListServices.getEvents(currentUser),
-          builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data!.docs[index];
-                    return Card(
-                        child: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(padding: EdgeInsets.only(bottom: 16.0),
+              child: Text('Events', style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold,),
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: _eventListServices.getEvents(currentUser),
+                builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot ds = snapshot.data!.docs[index];
+                        return Card(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                          Text('${ds['title']}'),
-                          Text('${ds['title']}'),
-                          Text('${ds['userId']}')
-                        ]));
-                  });
-            } else {
-              return Container();
-            }
-          })),
+                              Text('${ds['title']}'),
+                              Text('${ds['title']}'),
+                              Text('${ds['userId']}'),
+                            ],),);},);
+                  } else {
+                    return Container();
+                  }
+                }),
+              ),
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const EventNavigationPage(),
-              ));
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EventNavigationPage(),
+            ),
+          );
         },
         child: const Text(
           "+",

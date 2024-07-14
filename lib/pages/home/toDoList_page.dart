@@ -38,11 +38,15 @@ class _ToDoListPageState extends State<ToDoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("To-Do List"),
-      ),
       body: Column(
         children: [
+          const Text(
+                'To-Do List',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
@@ -51,7 +55,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
               decoration: InputDecoration(
                 labelText: 'Add a task',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () => _addTask(_textController.text),
                 ),
               ),
@@ -70,7 +74,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                     ),
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     onPressed: () => _deleteTask(index),
                   ),
                   onTap: () => _toggleTask(index),

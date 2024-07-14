@@ -27,11 +27,15 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Calendar"),
-      ),
       body: Column(
         children: [
+          const Text(
+                'Calendar',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
           TableCalendar(
             focusedDay: focusedDay,
             firstDay: DateTime.utc(2010, 1, 1),
@@ -61,7 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
             eventLoader: _getEventsForDay,
 
             // To style the Calendar
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               isTodayHighlighted: true,
               selectedDecoration: BoxDecoration(
                 color: Colors.blue,
@@ -82,7 +86,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 color: Colors.blue,
                 borderRadius: BorderRadius.circular(5.0),
               ),
-              formatButtonTextStyle: TextStyle(
+              formatButtonTextStyle: const TextStyle(
                 color: Colors.white,
               ),
             ),

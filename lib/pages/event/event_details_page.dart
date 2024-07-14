@@ -1,9 +1,7 @@
 import 'package:event_planner/pages/home/main_navigation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../services/event_list_services.dart';
-import '../home/events_page.dart';
 
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({super.key});

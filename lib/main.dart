@@ -1,9 +1,12 @@
-// import 'package:event_planner/pages/home/main_page.dart';
+
+import 'package:event_planner/pages/home/main_navigation_page.dart';
+import 'package:event_planner/pages/login/signup_page.dart';
 import 'package:event_planner/services/user_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'components/custom_scrollbar.dart';
 import 'pages/login/login_page.dart';
 
 
@@ -45,11 +48,17 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 45, 139, 167)),
           useMaterial3: true,
         ),
-        home: LoginPage()      
+        initialRoute: '/login',
+        routes: {
+            '/login':(context) => LoginPage(),
+            '/mainNav' :(context) => const MainNavigationPage(),
+            '/signup':(context) => SignUpPage(),
+        },     
+        debugShowCheckedModeBanner: false,
+        scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
       ),
     );
   }
 }
-
 
 
