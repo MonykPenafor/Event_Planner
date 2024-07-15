@@ -1,6 +1,7 @@
 
 import 'package:event_planner/pages/home/main_navigation_page.dart';
 import 'package:event_planner/pages/login/signup_page.dart';
+import 'package:event_planner/services/event_services.dart';
 import 'package:event_planner/services/user_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -40,7 +41,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserServices(), lazy: false,)],
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserServices(), lazy: false,),
+        ChangeNotifierProvider(create: (_) => EventServices(), lazy: false,)],
       
       child: MaterialApp(
         title: 'Event Planner',

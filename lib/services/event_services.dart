@@ -1,18 +1,20 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:event_planner/models/app_user.dart';
+import 'package:flutter/foundation.dart';
 import '../models/event.dart';
 
-class EventListServices {
+class EventServices extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;   
 
   CollectionReference get _collectionRef => _firestore.collection("events"); 
 
-  Future<Map<String, dynamic>> createEvent(String title, String userId) async {
+  Future<Map<String, dynamic>> createEvent(String title, String userId, int numberOfGuests) async {
     try {
       Event event = Event(
         title: title,
         userId: userId,
+        numberOfGuests: numberOfGuests,
       );
 
       await addEvent(event);
@@ -34,12 +36,12 @@ class EventListServices {
     await _collectionRef.add(event.toJson());
   }
 
-  Stream<QuerySnapshot> getEvents(User? user) {
+  Stream<QuerySnapshot> fetchEvents(AppUser? user) {
 
-  String aa = user!.uid;
+  String? id = user!.id;
 
-    return _firestore.collection('events')
-        .where('userId', isEqualTo: aa)
+    return _collectionRef
+        .where('userId', isEqualTo: id)
         .orderBy('title')
         .snapshots();
   }

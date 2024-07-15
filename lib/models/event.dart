@@ -8,11 +8,13 @@ class Event{
   String? id;
   String? title;
   String? userId;
+  int? numberOfGuests;
   
   Event({
     this.id, 
     this.title, 
     this.userId, 
+    this.numberOfGuests,
   });
 
 
@@ -23,6 +25,7 @@ class Event{
       id: doc.id, // Document ID
       title: doc['title'], // 'title' field in the document
       userId: doc['userId'], // 'userId' field in the document
+      numberOfGuests: doc['numberOfGuests'],
     );
   }
 
@@ -33,6 +36,7 @@ class Event{
       "id": id,
       "title": title,
       "userId": userId,
+      "numberOfGuests": numberOfGuests,
     };
   }
 }
