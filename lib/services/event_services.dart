@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_in_if_null_operators
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/models/app_user.dart';
@@ -9,15 +11,31 @@ class EventServices extends ChangeNotifier {
 
   CollectionReference get _collectionRef => _firestore.collection("events"); 
 
-  Future<Map<String, dynamic>> createEvent(String title, String userId, int numberOfGuests) async {
+  Future<Map<String, dynamic>> createEvent({String? title, String? userId, int? numberOfAttendees, String? location, DateTime? date, String? theme, String? imageUrl, String? description, String? type,  String? sizeRating}) async {
     try {
+
       Event event = Event(
-        title: title,
-        userId: userId,
-        numberOfGuests: numberOfGuests,
+        title: title ?? null,
+        userId: userId ?? null,
+        numberOfAttendees: numberOfAttendees ?? 0, // Default to 0 if null
+        location: location ?? null,
+        date: date ?? null,
+        theme: theme ?? null,
+        imageUrl: imageUrl ?? null,
+        description: description ?? null,
+        type: type ?? null,
+        sizeRating: sizeRating ?? null,
       );
 
-      await addEvent(event);
+      // Add the event and get the document reference
+      DocumentReference docRef = await _collectionRef.add(event.toJson());
+
+      // Set the event ID
+      event.id = docRef.id;
+
+      // Optionally, update the document with the ID
+      await _collectionRef.doc(event.id).set(event.toJson(), SetOptions(merge: true));
+
 
       return {
         'success': true,
@@ -32,9 +50,6 @@ class EventServices extends ChangeNotifier {
     }
   }
 
-  Future<void> addEvent(Event event) async {
-    await _collectionRef.add(event.toJson());
-  }
 
   Stream<QuerySnapshot> fetchEvents(AppUser? user) {
 

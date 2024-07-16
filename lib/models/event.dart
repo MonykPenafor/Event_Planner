@@ -2,30 +2,48 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-class Event{
-
+class Event {
   String? id;
   String? title;
-  String? userId;
-  int? numberOfGuests;
-  
-  Event({
-    this.id, 
-    this.title, 
-    this.userId, 
-    this.numberOfGuests,
-  });
+  String? imageUrl;
+  DateTime? date;
+  String? location;
+  int? numberOfAttendees;
+  String? theme;
+  String? description;
+  String? type;
+  String? sizeRating;
+  String? userId;  // Username or User ID
 
+  Event({
+    this.id,
+    this.title,
+    this.imageUrl,
+    this.date,
+    this.location,
+    this.numberOfAttendees,
+    this.theme,
+    this.description,
+    this.type,
+    this.sizeRating,
+    this.userId,
+  });
 
 
   // Factory method to create an Event from a Firestore DocumentSnapshot
   factory Event.fromDocument(DocumentSnapshot doc) {
     return Event(
-      id: doc.id, // Document ID
-      title: doc['title'], // 'title' field in the document
-      userId: doc['userId'], // 'userId' field in the document
-      numberOfGuests: doc['numberOfGuests'],
+      id: doc.id,
+      title: doc['title'], 
+      userId: doc['userId'], 
+      numberOfAttendees: doc['numberOfAttendees'],
+      imageUrl: doc['imageUrl'],
+      date: doc['date'],
+      location: doc['location'],
+      theme: doc['theme'],
+      description: doc['description'],
+      type: doc['type'],
+      sizeRating: doc['sizeRating'],
     );
   }
 
@@ -36,36 +54,17 @@ class Event{
       "id": id,
       "title": title,
       "userId": userId,
-      "numberOfGuests": numberOfGuests,
+      "numberOfAttendees": numberOfAttendees,
+      "imageUrl": imageUrl,
+      "date": date,
+      "location": location,
+      "theme": theme,
+      "description": description,
+      "type": type,
+      "sizeRating": sizeRating,
     };
   }
 }
 
 
 
-// class Event {
-//   final String id;
-//   final String title;
-//   final String imageUrl;
-//   final DateTime date;
-//   final String location;
-//   final int numberOfAttendees;
-//   final String theme;
-//   final String description;
-//   final String type;
-//   final String sizeRating;
-//   final String inCharge;  // Username or User ID
-
-//   Event({
-//     required this.id,
-//     required this.title,
-//     required this.imageUrl,
-//     required this.date,
-//     required this.location,
-//     required this.numberOfAttendees,
-//     required this.theme,
-//     required this.description,
-//     required this.type,
-//     required this.sizeRating,
-//     required this.inCharge,
-//   });

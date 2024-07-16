@@ -3,12 +3,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/services/event_services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
 import '../../services/user_services.dart';
 import '../event/event_navigation_page.dart';
 
-class EventsPage extends HookWidget {
+class EventsPage extends StatelessWidget {
   const EventsPage({super.key});
 
   @override
@@ -81,7 +80,8 @@ class EventsPage extends HookWidget {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text('${ds['title']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0,),),
-                                            Text('${ds['title']}', style: const TextStyle(fontSize: 14.0),),
+                                            Text('${ds['date']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0,),),
+                                            Text('${ds['description']}', style: const TextStyle(fontSize: 14.0),),
                                             Text('${ds['userId']}', style: const TextStyle(fontSize: 12.0, color: Color.fromARGB(255, 58, 51, 51)),
                                             ),
                                           ],

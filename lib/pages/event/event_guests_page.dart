@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class EventGuestsPage extends StatelessWidget {
-  final TextEditingController guestsController;
+  final TextEditingController numberOfAttendeesController;
 
-  const EventGuestsPage({super.key, required this.guestsController});
+  const EventGuestsPage({super.key, required this.numberOfAttendeesController});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class EventGuestsPage extends StatelessWidget {
       child: Column(
         children: [
           TextField(
-            controller: guestsController,
+            controller: numberOfAttendeesController,
             decoration: const InputDecoration(
               labelText: 'Number of Guests',
             ),

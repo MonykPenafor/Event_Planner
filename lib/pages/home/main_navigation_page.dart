@@ -19,7 +19,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
-        EventsPage(),   
+        const EventsPage(),   
         const ToDoListPage(),     
         const CalendarPage(),   
         AnalyticsPage(),     
