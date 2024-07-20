@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/services/event_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../services/task_services.dart';
 import '../../services/user_services.dart';
 import '../event/event_navigation_page.dart';
 
@@ -107,6 +108,7 @@ class EventsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -114,10 +116,7 @@ class EventsPage extends StatelessWidget {
             ),
           );
         },
-        child: const Text(
-          "+",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
+        child: const Icon(Icons.add)
       ),
     );
   }

@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// ignore_for_file: avoid_print
 
-import '../../models/task.dart';
+import 'package:flutter/material.dart';
 
 class ToDoListPage extends StatefulWidget {
   const ToDoListPage({Key? key}) : super(key: key);
@@ -11,85 +10,53 @@ class ToDoListPage extends StatefulWidget {
 }
 
 class _ToDoListPageState extends State<ToDoListPage> {
-  final List<Task> _tasks = [];
-  final TextEditingController _textController = TextEditingController();
 
-  void _addTask(String title) {
-    if (title.isNotEmpty) {
-      setState(() {
-        _tasks.add(Task(title: title));
-      });
-      _textController.clear();
-    }
-  }
-
-  void _toggleTask(int index) {
-    setState(() {
-      _tasks[index].toggleDone();
-    });
-  }
-
-  void _deleteTask(int index) {
-    setState(() {
-      _tasks.removeAt(index);
-    });
-  }
+final TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Text(
-                'To-Do List',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
+      
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Digite algo'),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
               ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _textController,
-              onSubmitted: _addTask,
-              decoration: InputDecoration(
-                labelText: 'Add a task',
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => _addTask(_textController.text),
-                ),
-              ),
+            ],
+          ),
+          content: TextField(
+            controller: _textController,
+            decoration: const InputDecoration(
+              labelText: 'Digite algo',
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _tasks.length,
-              itemBuilder: (context, index) {
-                final task = _tasks[index];
-                return ListTile(
-                  title: Text(
-                    task.title,
-                    style: TextStyle(
-                      decoration: task.isDone ? TextDecoration.lineThrough : null,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => _deleteTask(index),
-                  ),
-                  onTap: () => _toggleTask(index),
-                );
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Enviar'),
+              onPressed: () {
+                print(_textController.text);
+                Navigator.of(context).pop();
               },
             ),
-          ),
-        ],
+          ],
+        );
+      },
+    );},
+        child: const Icon(Icons.add),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
   }
 }

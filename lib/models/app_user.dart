@@ -31,11 +31,10 @@ class AppUser{
     };
   }
 
-AppUser.fromJson(DocumentSnapshot doc){
-  id = doc.id;
-  userName = doc.get('userName');
-  email = doc.get('email');
-  
+  AppUser.fromJson(DocumentSnapshot doc){
+    id = doc.id;
+    userName = doc.get('userName');
+    email = doc.get('email');
   }
 
 

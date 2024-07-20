@@ -2,6 +2,7 @@ import 'package:event_planner/pages/event/event_budget_page.dart';
 import 'package:event_planner/pages/event/event_details_page.dart';
 import 'package:event_planner/pages/event/event_toDoList_page.dart';
 import 'package:event_planner/services/event_services.dart';
+import 'package:event_planner/services/task_services.dart';
 import 'package:flutter/material.dart';
 import 'package:event_planner/pages/event/event_guests_page.dart';
 import 'package:event_planner/pages/event/event_itinerary_page.dart';
@@ -54,8 +55,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
  @override
   Widget build(BuildContext context) {
-    return Consumer2<UserServices, EventServices>(
-      builder: (context, userServices, eventServices, child) {
+    return Consumer3<UserServices, EventServices, TaskServices>(
+      builder: (context, userServices, eventServices, taskServices, child) {
         if (userServices.appUser == null) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -90,7 +91,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
               EventGuestsPage(
                 numberOfAttendeesController: _numberOfAttendeesController),
 
-              const EventToDoList(),
+              const EventToDoListPage(),
               const EventItineraryPage(),
               const EventBudgetPage(),
             ],
@@ -108,17 +109,31 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                 sizeRating: _sizeRatingController.text,
                 theme: _themeController.text,
                 type: _typeController.text,
+                tasks: taskServices.tasks, 
               );
 
-              // Show snackbar based on the result
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(result['message']),
-                  backgroundColor: result['success'] ? Colors.green : Colors.red,
-                ),
-              );
 
-              Navigator.pushNamed(context, '/mainNav');
+              if (result['success']) {
+                
+                taskServices.resetTasks();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(result['message']),
+                    backgroundColor: result['success'] ? Colors.green : Colors.red,
+                  ),
+                );
+                Navigator.pushNamed(context, '/mainNav');
+
+              }else {
+                // Show error message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(result['message']),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
             },
             child: const Icon(Icons.save),
           ),
