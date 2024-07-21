@@ -8,12 +8,12 @@ class CustomDateField extends StatelessWidget {
   final Icon prefixIcon;
 
   const CustomDateField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     required this.hintText,
     required this.prefixIcon,
-  }) : super(key: key);
+  });
 
   Future<void> _selectDate(BuildContext context) async {
     final ThemeData customTheme = ThemeData(

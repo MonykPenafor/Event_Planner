@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_planner/models/task.dart';
 
 class Event {
   String? id;

@@ -7,12 +7,12 @@ class CustomTextField extends StatelessWidget {
   final Icon prefixIcon;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     required this.hintText,
     required this.prefixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

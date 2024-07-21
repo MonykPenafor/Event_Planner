@@ -3,12 +3,11 @@ import 'package:provider/provider.dart';
 
 import '../../models/task.dart';
 import '../../services/task_services.dart';
-import '../../services/user_services.dart';
 
 
 
 class EventToDoListPage extends StatefulWidget {
-  const EventToDoListPage({Key? key}) : super(key: key);
+  const EventToDoListPage({super.key});
 
   @override
   _EventToDoListPage createState() => _EventToDoListPage();

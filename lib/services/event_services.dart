@@ -43,7 +43,7 @@ class EventServices extends ChangeNotifier {
 
       if(tasks != null){
           for (var task in tasks) {
-            _taskServices.createTask(docRef.id, task);
+            _taskServices.createTask(userId!, task, eventId: docRef.id);
           }
       }
 

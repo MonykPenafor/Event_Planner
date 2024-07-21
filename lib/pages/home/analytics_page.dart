@@ -7,7 +7,7 @@ class AnalyticsPage extends StatelessWidget {
   final bool animate;
 
   // Modified constructor using initializer list for default values
-  AnalyticsPage({
+  AnalyticsPage({super.key, 
     List<charts.Series<dynamic, String>>? barChartData,
     List<charts.Series<dynamic, DateTime>>? lineChartData,
     this.animate = false,

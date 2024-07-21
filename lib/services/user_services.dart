@@ -12,11 +12,9 @@ class UserServices extends ChangeNotifier {
 
   AppUser? appUser = AppUser();
 
-  CollectionReference get _collectionRef => _firestore.collection(
-      "users"); // Provides a reference to the 'users' collection in Firebase.
+  CollectionReference get _collectionRef => _firestore.collection("users"); // Provides a reference to the 'users' collection in Firebase.
 
-  DocumentReference get _docRef => _firestore.doc(
-      'users/${appUser!.id}'); // Provides a reference to a specific user document using the user's ID.
+  DocumentReference get _docRef => _firestore.doc('users/${appUser!.id}'); // Provides a reference to a specific user document using the user's ID.
 
   UserServices() {
     _loadCurrentUser();
@@ -89,7 +87,7 @@ class UserServices extends ChangeNotifier {
    Future<void> _loadCurrentUser({User? user}) async {
     User? currentUser = user ?? _auth.currentUser;
     if (currentUser != null) {
-      DocumentSnapshot docUser = await _firestore.collection('users').doc(currentUser.uid).get();
+      DocumentSnapshot docUser = await _collectionRef.doc(currentUser.uid).get();
       appUser = AppUser.fromJson(docUser);
     notifyListeners();
     } 

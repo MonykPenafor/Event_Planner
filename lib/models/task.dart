@@ -5,12 +5,14 @@ class Task {
   String description;
   bool isDone;
   String? eventId;
+  String? userId;
 
   Task({
     this.id,
     required this.description,
     this.isDone = false,
-    this.eventId,
+    this.eventId = "General Task (No event specifically)",
+    this.userId,
   });
 
   // Factory method to create a Task from a map
@@ -20,6 +22,7 @@ class Task {
       description: data['description'],
       isDone: data['isDone'],
       eventId: data['eventId'],
+      userId: data['userId'],
     );
   }
 
@@ -30,9 +33,9 @@ class Task {
       'description': description,
       'isDone': isDone,
       'eventId': eventId,
+      'userId': userId,
     };
   }
-
 
   factory Task.fromDocument(DocumentSnapshot doc) {
     return Task(
@@ -40,6 +43,7 @@ class Task {
       eventId: doc['eventId'],
       description: doc['description'],
       isDone: doc['isDone'],
+      userId: doc['userId'],
     );
   }
 
