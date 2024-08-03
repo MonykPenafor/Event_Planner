@@ -17,62 +17,68 @@ class ToDoListPage extends StatefulWidget {
 }
 
 class _ToDoListPageState extends State<ToDoListPage> {
+
   final TextEditingController _textController = TextEditingController();
   late AppUser? _appUser;
 
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
  @override
   Widget build(BuildContext context) {
+
     return Consumer2<TaskServices, UserServices>(
       builder: (context, taskServices, userServices, child) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('To-Do List'),
-          ),
+
+          appBar: AppBar(title: const Text('To-Do List'),),
           body: StreamBuilder(
+
             stream: taskServices.fetchTasks(userServices.appUser),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasData) {
                 _appUser = userServices.appUser;
-              return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                   DocumentSnapshot ds = snapshot.data!.docs[index];
+                return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {DocumentSnapshot ds = snapshot.data!.docs[index];
 
-                  return ListTile(
-                    title: Text(
-                      ds["description"],
-                      style: TextStyle(
-                        decoration: ds["isDone"] ? TextDecoration.lineThrough : null,
+                    return ListTile(
+                      title: Text(
+                        ds["description"],
+                        style: TextStyle(decoration: ds["isDone"] ? TextDecoration.lineThrough : null,),
                       ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          taskServices.deleteTask2(index);
-                        });
+
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {setState(() {taskServices.deleteTask2(index);});
+                        },
+                      ),
+
+                      onTap: () {setState(() {taskServices.toggleDone2(index);});
                       },
-                    ),
-                    onTap: () {
-                      setState(() {
-                        taskServices.toggleDone2(index);
-                      });
-                    },
-                  );
-                },
-              );}
-              else{
+                    );
+                  },
+                );
+              }
+
+              else
+              {
                 _appUser = userServices.appUser;
                 return const Center(child: CircularProgressIndicator());
               }
             },
           ),
+
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
+
                   return AlertDialog(
                     titlePadding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
                     title: Row(
@@ -81,26 +87,26 @@ class _ToDoListPageState extends State<ToDoListPage> {
                         const Text('Task'),
                         IconButton(
                           icon: const Icon(Icons.close),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
+                          onPressed: () {Navigator.of(context).pop();},
                         ),
                       ],
                     ),
+
                     content: TextField(
                       controller: _textController,
-                      decoration: const InputDecoration(
-                        labelText: 'Task',
-                      ),
+                      decoration: const InputDecoration(labelText: 'Task',),
                     ),
+
                     actions: <Widget>[
                       TextButton(
                         child: const Text('Save'),
                         onPressed: () {
                           if (_textController.text.isNotEmpty) {
+
                             Task newTask = Task(description: _textController.text);
                             taskServices.addTask2(_appUser?.id, newTask);
                             _textController.clear();
+                            
                             Navigator.of(context).pop();
                           }
                         },
@@ -117,9 +123,4 @@ class _ToDoListPageState extends State<ToDoListPage> {
     );
   }
 
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
 }

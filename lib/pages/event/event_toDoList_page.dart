@@ -1,13 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/task.dart';
 import '../../services/task_services.dart';
 
-
-
 class EventToDoListPage extends StatefulWidget {
-  const EventToDoListPage({super.key});
+
+  final Stream<QuerySnapshot<Object?>>? tasks;
+
+  const EventToDoListPage({super.key, this.tasks});
 
   @override
   _EventToDoListPage createState() => _EventToDoListPage();
@@ -19,9 +20,8 @@ class _EventToDoListPage extends State<EventToDoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskServices>(
-      builder: (context, taskServices, child) {
-        return Scaffold(
+    return Consumer<TaskServices>(builder: (context, taskServices, child) {
+      return Scaffold(
         body: Column(
           children: [
             Padding(
@@ -29,17 +29,22 @@ class _EventToDoListPage extends State<EventToDoListPage> {
               child: TextField(
                 controller: _textController,
                 decoration: InputDecoration(
+
                   labelText: 'Add a task',
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.add),
                     onPressed: () {
+
                       if (_textController.text.isNotEmpty) {
-                        setState(() { 
+
+                        setState(() {
                           Task newTask = Task(description: _textController.text);
-                          taskServices.addTask(newTask); 
+                          taskServices.addTask(newTask);
                         });
+
                         _textController.clear();
-                      }                    
+                      }
+
                     },
                   ),
                 ),
@@ -49,26 +54,31 @@ class _EventToDoListPage extends State<EventToDoListPage> {
               child: ListView.builder(
                 itemCount: taskServices.tasks.length,
                 itemBuilder: (context, index) {
+
                   final task = taskServices.tasks[index];
+
                   return ListTile(
-                    title: Text(
-                      task.description,
-                      style: TextStyle(
-                        decoration: task.isDone ? TextDecoration.lineThrough : null,
+                    
+                      title: Text(
+                        task.description,
+                        style: TextStyle(
+                          decoration: task.isDone ? TextDecoration.lineThrough : null,
+                        ),
                       ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {    
+
+                      trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              taskServices.deleteTask(index);
+                            });
+                          }),
+
+                      onTap: () {
                         setState(() {
-                          taskServices.deleteTask(index);
-                        });}
-                    ),
-                    onTap: (){
-                      setState(() {
-                        taskServices.toggleDone(index);
-                      });
-                    }
+                          taskServices.toggleDone(index);
+                        });
+                      }
                   );
                 },
               ),
@@ -76,9 +86,8 @@ class _EventToDoListPage extends State<EventToDoListPage> {
           ],
         ),
       );
-  });
+    });
   }
-
 
   @override
   void dispose() {

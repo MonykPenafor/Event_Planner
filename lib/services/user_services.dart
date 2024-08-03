@@ -20,12 +20,9 @@ class UserServices extends ChangeNotifier {
     _loadCurrentUser();
   }
 
-  Future<Map<String, dynamic>> signUp(
-      String userName, String email, String password) async {
+  Future<Map<String, dynamic>> signUp(String userName, String email, String password) async {
     try {
-      User? user = (await _auth.createUserWithEmailAndPassword(
-              email: email, password: password))
-          .user;
+      User? user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
       appUser!.id = user!.uid;
       appUser!.email = user.email;
@@ -46,7 +43,6 @@ class UserServices extends ChangeNotifier {
       } else {
         message = 'Error: ${error.message}';
       }
-
       return {
         'success': false,
         'message': message,

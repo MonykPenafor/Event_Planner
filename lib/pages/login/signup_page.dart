@@ -16,54 +16,56 @@ class SignUpPage extends StatelessWidget {
 
 @override
 Widget build(BuildContext context) {
+
   return Scaffold(
     body: Padding(
       padding: const EdgeInsets.all(30),
       child: Consumer<UserServices>(
         builder: (context, userServices, child) {
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text('SIGN UP', style: TextStyle(color:  Color.fromARGB(255, 41, 41, 41), fontSize: 20, fontWeight: FontWeight.bold),),
+              const Text('SIGN UP', 
+              style: TextStyle(
+                color:  Color.fromARGB(255, 41, 41, 41), fontSize: 20, fontWeight: FontWeight.bold),),
+              
               const SizedBox(height: 15,),
+
               TextFormField(
                 controller: _userNameController,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person),
                   label: Text("Username"),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1.2)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1.7)
-                  )
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1.2)),
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 1.7))
                 ),
               ),
+
               const SizedBox(height: 10,),
+
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.email),
                   label: Text("E-mail"),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1.2)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1.7)
-                  )
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1.2)),
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 1.7))
                 ),
               ),
+
               const SizedBox(height: 10,),
+
               PasswordField(
                 onPasswordChanged: (value) {
                   _passwordController.text = value;
                 },
               ),
+
               Column(
                 children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30,),
+
                   ElevatedButton(
                     onPressed: () async {
                       _appUser.userName = _userNameController.text;
@@ -76,28 +78,20 @@ Widget build(BuildContext context) {
                         _appUser.password.toString()
                       );
 
+                      CustomSnackBar.show(context, result['message'], result['success']);
+
                       if (result['success']) {
-                        CustomSnackBar.show(
-                          context,
-                          result['message'],
-                          const Color.fromARGB(255, 88, 155, 0)
-                        );
                         Navigator.pop(context);
-                      } else {
-                        CustomSnackBar.show(
-                          context,
-                          result['message'],
-                          const Color.fromARGB(255, 133, 0, 0)
-                        );
-                      }
+                      } 
                     },
+
                     style: ElevatedButton.styleFrom(
                       elevation: 1.5,
                       minimumSize: const Size.fromHeight(50),
                       shape: LinearBorder.bottom()
                     ),
-                    child: const Text(
-                      'Register',
+
+                    child: const Text( 'Register',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
@@ -106,20 +100,31 @@ Widget build(BuildContext context) {
                   ),
                 ],
               ),
+
               const SizedBox(height: 25,),
+
               Container(
                 alignment: Alignment.centerRight,
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text('Already have an account?', style: TextStyle(color: Color.fromARGB(255, 34, 34, 34), fontWeight: FontWeight.bold,),),
+
+                    const Text('Already have an account?', 
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 34, 34, 34), 
+                        fontWeight: FontWeight.
+                        bold,),),
+
                     const SizedBox(width: 5,),
+
                     InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      child: const Text('Login', style: TextStyle(color: Color.fromARGB(255, 6, 135, 221), fontWeight: FontWeight.bold,),),
+                      onTap: () {Navigator.pushNamed(context, '/login');},
+                      child: const Text('Login', 
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 6, 135, 221), 
+                          fontWeight: FontWeight.bold,),
+                      ),
                     ),
                   ],
                 ),

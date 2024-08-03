@@ -11,9 +11,10 @@ class Event {
   String? description;
   String? type;
   String? sizeRating;
-  String? userId;  // Username or User ID
+  String? userId;  
 
-  Event({
+  Event(
+    {
     this.id,
     this.title,
     this.imageUrl,
@@ -27,25 +28,8 @@ class Event {
     this.userId,
   });
 
-  // Factory method to create an Event from a Firestore DocumentSnapshot
-  factory Event.fromDocument(DocumentSnapshot doc) {
-    var data = doc.data() as Map<String, dynamic>;
-    return Event(
-      id: doc.id,
-      title: data['title'],
-      userId: data['userId'],
-      numberOfAttendees: data['numberOfAttendees'],
-      imageUrl: data['imageUrl'],
-      date: (data['date'] as Timestamp).toDate(),
-      location: data['location'],
-      theme: data['theme'],
-      description: data['description'],
-      type: data['type'],
-      sizeRating: data['sizeRating'],
-    );
-  }
 
-  // Method to convert an Event object to a JSON-compatible map
+  // Convert an Event object to map (JSON-compatible)
   Map<String, dynamic> toJson() {
     return {
       "id": id,
@@ -61,4 +45,31 @@ class Event {
       "sizeRating": sizeRating,
     };
   }
+
+
+
+  Event.fromDocument(DocumentSnapshot doc){
+    
+    DateTime? eventDate;
+
+      try {
+        eventDate = (doc.get("date") as Timestamp).toDate();
+      } catch (e) {
+        eventDate = null;
+      }
+
+    id = doc.id;
+    title = doc.get('title');
+    userId = doc.get('userId');
+    numberOfAttendees = doc.get('numberOfAttendees');
+    imageUrl = doc.get('imageUrl');
+    date = eventDate;
+    location = doc.get('location');
+    theme = doc.get('theme');
+    description = doc.get('description');
+    type = doc.get('type');
+    sizeRating = doc.get('sizeRating');
+  }
+
+
 }

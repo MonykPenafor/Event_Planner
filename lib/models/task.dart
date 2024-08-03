@@ -11,22 +11,11 @@ class Task {
     this.id,
     required this.description,
     this.isDone = false,
-    this.eventId = "General Task (No event specifically)",
+    this.eventId,
     this.userId,
   });
 
-  // Factory method to create a Task from a map
-  factory Task.fromMap(Map<String, dynamic> data) {
-    return Task(
-      id: data['id'],
-      description: data['description'],
-      isDone: data['isDone'],
-      eventId: data['eventId'],
-      userId: data['userId'],
-    );
-  }
-
-  // Method to convert a Task object to a JSON-compatible map
+  // Convert Task object to map (JSON-compatible)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -38,13 +27,13 @@ class Task {
   }
 
   factory Task.fromDocument(DocumentSnapshot doc) {
-    return Task(
-      id: doc.id,
-      eventId: doc['eventId'],
-      description: doc['description'],
-      isDone: doc['isDone'],
-      userId: doc['userId'],
-    );
-  }
+      return Task(
+        id: doc.id,
+        description: doc.get('description'),
+        isDone: doc.get('isDone'),
+        eventId: doc.get('eventId'),
+        userId: doc.get('userId'),
+      );
+    }
 
 }

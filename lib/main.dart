@@ -1,4 +1,5 @@
 
+import 'package:event_planner/pages/event/event_navigation_page.dart';
 import 'package:event_planner/pages/home/main_navigation_page.dart';
 import 'package:event_planner/pages/login/signup_page.dart';
 import 'package:event_planner/services/event_services.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
             '/login':(context) => LoginPage(),
             '/mainNav' :(context) => const MainNavigationPage(),
             '/signup':(context) => SignUpPage(),
+            '/event':(context) => EventNavigationPage(),
         },     
         debugShowCheckedModeBanner: false,
         scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),

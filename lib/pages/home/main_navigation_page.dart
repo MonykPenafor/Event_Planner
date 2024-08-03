@@ -7,6 +7,7 @@ import 'analytics_page.dart';
 import 'profile_page.dart';
 
 class MainNavigationPage extends StatefulWidget {
+
   const MainNavigationPage({super.key});
 
   @override
@@ -14,42 +15,47 @@ class MainNavigationPage extends StatefulWidget {
 }
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
+
   int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
-        const EventsPage(),   
-        const ToDoListPage(),     
-        const CalendarPage(),   
-        AnalyticsPage(),     
+        EventsPage(),
+        const ToDoListPage(),
+        const CalendarPage(),
+        AnalyticsPage(),
         ProfilePage(),
-      ][_selectedIndex],
+      ]
+      [_selectedIndex],
+
       bottomNavigationBar: NavigationBar(
         height: 60,
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (value) {
-          setState(() {
-            _selectedIndex = value;
-          });
-        },
-        destinations:  const [
+        onDestinationSelected: (value) {setState(() { _selectedIndex = value;});},
+        destinations: const [
+
           NavigationDestination(
             icon: Icon(Icons.event_note_rounded),
             label: 'Events',
           ),
+
           NavigationDestination(
             icon: Icon(Icons.list_alt_rounded),
             label: 'To do List',
           ),
+
           NavigationDestination(
             icon: Icon(Icons.calendar_month_rounded),
             label: 'Calendar',
           ),
+
           NavigationDestination(
             icon: Icon(Icons.analytics_outlined),
             label: 'Analytics',
           ),
+          
           NavigationDestination(
             icon: Icon(Icons.person_outlined),
             label: 'Profile',

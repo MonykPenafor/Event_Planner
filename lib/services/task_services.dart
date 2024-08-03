@@ -12,22 +12,23 @@ class TaskServices extends ChangeNotifier {
   List<Task> tasks = [];
   List<Task> allTasks = [];
 
-  Future<Map<String, dynamic>> createTask(String userId, Task task1, {String eventId = "General Task (No event specifically)"}) async {
+  List<Task> persistedTasks = [];
+  List<Task> localTasks = [];
+
+  Future<Map<String, dynamic>> createTask(String userId, Task t, {String eventId = "General Task"}) async {
     try {
+
       Task task = Task(
         eventId: eventId,
         userId: userId,
-        description: task1.description,
-        isDone: task1.isDone,
+        description: t.description,
+        isDone: t.isDone,
       );
 
-      // Add the task and get the document reference
       DocumentReference docRef = await _collectionRef.add(task.toJson());
 
-      // Set the task ID
       task.id = docRef.id;
 
-      // Optionally, update the document with the ID
       await _collectionRef.doc(task.id).set(task.toJson(), SetOptions(merge: true));
       notifyListeners();
 
@@ -35,13 +36,73 @@ class TaskServices extends ChangeNotifier {
         'success': true,
         'message': 'Task created successfully',
       };
-    } catch (e) {
+    } 
+    catch (e) 
+    {
       return {
         'success': false,
         'message': 'Error creating task: $e',
       };
     }
   }
+
+  Stream<QuerySnapshot> fetchTasks(AppUser? user) {
+
+    String? id = user!.id;
+
+    Stream<QuerySnapshot> taskStream = _collectionRef
+          .where('userId', isEqualTo: id)
+          .orderBy('description')
+          .snapshots();
+
+    taskStream.listen((QuerySnapshot snapshot) {
+      allTasks = snapshot.docs.map((DocumentSnapshot document) {return Task.fromDocument(document);}).toList();
+      notifyListeners();
+    });
+
+    return taskStream;
+  }
+
+  Stream<QuerySnapshot> fetchSpecificsTasksAsStream(String? eventId) {
+
+
+    Stream<QuerySnapshot> taskStream = _collectionRef
+          .where("eventId", isEqualTo: eventId)
+          .orderBy('description')
+          .snapshots();
+
+    taskStream.listen((QuerySnapshot snapshot) {
+      allTasks = snapshot.docs.map(
+        (DocumentSnapshot document){return Task.fromDocument(document);}).toList();
+        notifyListeners();
+    });
+
+    return taskStream;
+  }
+
+
+  List<Task>? fetchSpecificsTasksAsList(String? eventId) {
+
+    List<Task>? eventTasks;
+
+    Stream<QuerySnapshot> taskStream = _collectionRef
+          .where("eventId", isEqualTo: eventId)
+          .orderBy('description')
+          .snapshots();
+
+    taskStream.listen((QuerySnapshot snapshot) {
+      eventTasks = snapshot.docs.map((DocumentSnapshot document) {return Task.fromDocument(document);}).toList();
+      notifyListeners();
+    });
+
+    return eventTasks;
+  }
+
+  Future<void> deleteTask3(String? taskId) async {
+    await _collectionRef.doc(taskId).delete();
+  }
+
+
 
   void addTask(Task task) {
     tasks.add(task);
@@ -80,29 +141,11 @@ class TaskServices extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void resetAllTasks(){
     allTasks = [];
   }
 
   
-
-  Stream<QuerySnapshot> fetchTasks(AppUser? user) {
-
-    String? id = user!.id;
-
-    Stream<QuerySnapshot> taskStream = _collectionRef
-          .where('userId', isEqualTo: id)
-          .orderBy('description')
-          .snapshots();
-
-    taskStream.listen((QuerySnapshot snapshot) {
-      allTasks = snapshot.docs.map((DocumentSnapshot document) {return Task.fromDocument(document);}).toList();
-      notifyListeners();
-    });
-
-    return taskStream;
-  }
 
 }
 
