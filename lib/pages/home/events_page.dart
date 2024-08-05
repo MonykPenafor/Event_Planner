@@ -2,7 +2,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/services/event_services.dart';
-import 'package:event_planner/services/task_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -11,10 +10,10 @@ import '../../models/event.dart';
 import '../../services/user_services.dart';
 import '../event/event_navigation_page.dart';
 
+// ignore: must_be_immutable
 class EventsPage extends StatelessWidget {
 
   EventsPage({super.key});
-  Event _event = Event();
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +30,8 @@ class EventsPage extends StatelessWidget {
           children: [
 
             Expanded(
-              child: Consumer3<UserServices, EventServices, TaskServices>(
-                builder: (context, userServices, eventServices, taskServices,
+              child: Consumer2<UserServices, EventServices>(
+                builder: (context, userServices, eventServices,
                     child) {
 
                   return StreamBuilder(
@@ -44,7 +43,7 @@ class EventsPage extends StatelessWidget {
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: (context, index) {
                             DocumentSnapshot ds = snapshot.data!.docs[index];
-                            _event = Event.fromDocument(ds);
+                            Event _event = Event.fromDocument(ds);
 
                             return GestureDetector(
                               child: Container(
@@ -52,21 +51,18 @@ class EventsPage extends StatelessWidget {
                                 child: InkWell(borderRadius: BorderRadius.circular(8.0),
                                   onTap: () {
 
-
-                                    Stream<QuerySnapshot<Object?>> tasksFetched = 
-                                    taskServices.fetchSpecificsTasksAsStream(_event.id);
-
                                     print('Card tapped');
+                                    print(_event.id);
 
                                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                            EventNavigationPage(
-                                              event: _event,
-                                              tasksFetched: tasksFetched),
+                                            EventNavigationPage(event: _event),
                                       ),
                                     );
                                   },
 
                                   onLongPress: () {
+                                    
+
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -92,8 +88,13 @@ class EventsPage extends StatelessWidget {
                                             TextButton(
                                                 onPressed: () async {
 
-                                                  final result = await eventServices.deleteEvent(_event.id);
+
+                                                  var result = await eventServices.deleteEvent(_event.id);
+                                                  
                                                   Navigator.of(context).pop();
+
+
+                                                  print(result['message']);
 
                                                   CustomSnackBar.show(context, 
                                                     result['message'], 
@@ -130,24 +131,24 @@ class EventsPage extends StatelessWidget {
                                           children: [
 
                                             Text( 
-                                              '${ds['title']}',
+                                              _event.title!,
                                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0,),
                                             ),
 
                                             Text(
-                                              ds['date'] != null ? DateFormat('dd/MM/yyyy')
+                                              _event.date != null ? DateFormat('dd/MM/yyyy')
                                                                   .format((ds['date'] as Timestamp)
                                                                   .toDate()) : '',
                                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0,),
                                             ),
 
                                             Text(
-                                              '${ds['description']}',
+                                              _event.description!,
                                               style: const TextStyle(fontSize: 14.0),
                                             ),
 
                                             Text(
-                                              '${ds['userId']}',
+                                              _event.userId!,
                                               style: const TextStyle(fontSize: 12.0, color: Color.fromARGB(255, 58, 51, 51)),
                                             ),
                                           ],

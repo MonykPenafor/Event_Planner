@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/pages/event/event_budget_page.dart';
 import 'package:event_planner/pages/event/event_details_page.dart';
 import 'package:event_planner/pages/event/event_toDoList_page.dart';
@@ -14,9 +13,8 @@ import '../../services/user_services.dart';
 class EventNavigationPage extends StatefulWidget {
   
   final Event? event;
-  final Stream<QuerySnapshot<Object?>>? tasksFetched;
 
-  EventNavigationPage({super.key, this.event, this.tasksFetched});
+  EventNavigationPage({super.key, this.event});
 
   @override
   State<EventNavigationPage> createState() => _EventNavigationPageState();
@@ -35,6 +33,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
   final TextEditingController _themeController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _sizeRatingController = TextEditingController();
+  
 
   @override
   void initState() {
@@ -53,7 +52,10 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
       _themeController.text = widget.event!.theme ?? '';
       _typeController.text = widget.event!.type ?? '';
       _sizeRatingController.text = widget.event!.sizeRating ?? '';
+
+
     }
+
   }
 
   @override
@@ -112,7 +114,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
               ),
 
               EventToDoListPage(
-                tasks: widget.tasksFetched,
+                  tasks: widget.event != null ? taskServices.fetchTasksStreamByEvent(widget.event!.id) : null,
               ),
 
               EventBudgetPage(),

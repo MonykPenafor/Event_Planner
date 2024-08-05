@@ -82,13 +82,14 @@ class EventServices extends ChangeNotifier {
   Future<Map<String, dynamic>> deleteEvent(String? eventId) async {
     try {
 
-      List<Task>? eventTasks = _taskServices.fetchSpecificsTasksAsList(eventId); 
-      //List<Task>? eventTasks = _taskServices.fetchTasksByEvent(eventId); 
+      List<Task>? eventTasks = await _taskServices.fetchTasksListByEvent(eventId); 
 
-      for (Task task in eventTasks!) {
-        await _taskServices.deleteTask3(task.id);
-        //await _taskServices.deleteTask(task.id);
+      if(eventTasks.isNotEmpty){
+        for (Task task in eventTasks) {
+          await _taskServices.deleteTask(task.id);
+        }
       }
+
 
       await _collectionRef.doc(eventId).delete();
 
