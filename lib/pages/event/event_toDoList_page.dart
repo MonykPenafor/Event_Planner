@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_planner/models/app_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/task.dart';
 import '../../services/task_services.dart';
 
 class EventToDoListPage extends StatefulWidget {
-  final Stream<List<Task>>? tasks;
 
-  const EventToDoListPage({super.key, this.tasks});
+  final Stream<List<Task>>? persistedTasks;
+
+  const EventToDoListPage({super.key, this.persistedTasks});
 
   @override
   _EventToDoListPageState createState() => _EventToDoListPageState();
@@ -15,7 +17,6 @@ class EventToDoListPage extends StatefulWidget {
 
 class _EventToDoListPageState extends State<EventToDoListPage> {
   final TextEditingController _textController = TextEditingController();
-  List<Task> localTasks = [];
 
   @override
   void dispose() {
@@ -26,6 +27,8 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskServices>(builder: (context, taskServices, child) {
+      List<Task> tasks = taskServices.localTasks;
+
       return Scaffold(
         body: Column(
           children: [
@@ -39,10 +42,8 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       if (_textController.text.isNotEmpty) {
-                        setState(() {
-                          Task task = Task(description: _textController.text);
-                          localTasks.add(task);
-                        });
+                        Task task = Task(description: _textController.text);
+                        taskServices.addLocalTask(task);
                         _textController.clear();
                       }
                     },
@@ -50,55 +51,74 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
                 ),
               ),
             ),
+            
             Expanded(
-              child: StreamBuilder<List<Task>>(
-                stream: widget.tasks,
-                builder: (context, snapshot) {
-                  List<Task> tasks = [];
-                  if (snapshot.hasData) {
-                    tasks = snapshot.data!;
-                  }
-                  tasks.addAll(localTasks);
-
-                  return ListView.builder(
-                    itemCount: tasks.length,
-                    itemBuilder: (context, index) {
-                      final task = tasks[index];
-                      return ListTile(
-                        title: Text(
-                          task.description,
-                          style: TextStyle(
-                            decoration: task.isDone
-                                ? TextDecoration.lineThrough
-                                : null,
+              child: tasks.isEmpty ? const Center(child: Text('No tasks available')) : 
+                    ListView.builder(
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        final task = tasks[index];
+                        return ListTile(
+                          title: Text(
+                            task.description,
+                            style: TextStyle(
+                              decoration: task.isDone ? TextDecoration.lineThrough : null,
+                            ),
                           ),
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              if (index < tasks.length - localTasks.length) {
-                                // Se for uma tarefa do banco de dados, remova do banco
-                                taskServices.deleteTask(task.id);
-                              } else {
-                                // Se for uma tarefa local, remova da lista local
-                                localTasks.removeAt(index -
-                                    (tasks.length - localTasks.length));
-                              }
-                            });
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              taskServices.removeLocalTask(index);
+                            },
+                          ),
+                          onTap: () {
+                            taskServices.toggleTaskDone(index);
                           },
-                        ),
-                        onTap: () {
-                          setState(() {
-                            task.isDone = !task.isDone;
-                          });
+                        );
+                      },
+                    ),
+            ),
+          
+            if (widget.persistedTasks != null)
+              Expanded(
+                child: StreamBuilder<List<Task>>(
+                  stream: widget.persistedTasks,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text('Error loading tasks'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No tasks available'));
+                    } else {
+                      List<Task> persistedTasks = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: persistedTasks.length,
+                        itemBuilder: (context, index) {
+                          final task = persistedTasks[index];
+                          return ListTile(
+                            title: Text(
+                              task.description,
+                              style: TextStyle(
+                                decoration: task.isDone ? TextDecoration.lineThrough : null,
+                              ),
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                taskServices.deleteTask(task.id);
+                              },
+                            ),
+                            onTap: () {
+                              taskServices.toggleDone(task.id);
+                            },
+                          );
                         },
                       );
-                    },
-                  );
-                },
+                    }
+                  },
+                ),
               ),
-            ),
           ],
         ),
       );

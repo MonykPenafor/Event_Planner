@@ -13,83 +13,81 @@ class EventServices extends ChangeNotifier {
 
   final TaskServices _taskServices = TaskServices();
 
-  Future<Map<String, dynamic>> createEvent({
-    String? title,
-    String? userId,
-    int? numberOfAttendees,
-    String? location,
-    DateTime? date,
-    String? theme,
-    String? imageUrl,
-    String? description,
-    String? type,
-    String? sizeRating,
-    List<Task>? tasks}) 
-      
-    async {
-      try {
+  Future<Map<String, dynamic>> saveEvent(Event event, String? userId, List<Task> tasks) async {
+    
+    dynamic result;
 
-        Event event = Event(
-          title: title,
-          userId: userId,
-          numberOfAttendees: numberOfAttendees, 
-          location: location,
-          date: date,
-          theme: theme,
-          imageUrl: imageUrl,
-          description: description,
-          type: type,
-          sizeRating: sizeRating,
-        );
-
-        // Add the event and get the document reference
-        DocumentReference docRef = await _collectionRef.add(event.toJson());
-
-        // Set the event ID
-        event.id = docRef.id;
-
-        // update the document with the ID
-        await _collectionRef.doc(event.id).set(event.toJson(), SetOptions(merge: true));
-
-        if (tasks != null) {
-          for (var task in tasks) {
-            _taskServices.createTask(userId!, task, eventId: docRef.id);
-          }
-        }
-
-        return {
-          'success': true,
-          'message': 'Event created successfully',
-        };
+    try {
+      if (event.id != null) 
+      {
+        result = await updateEvent(userId, event, tasks);
       } 
-
-      catch (e) {
-        return {
-          'success': false, 
-          'message': 'Error creating event: $e'
-        };
+      else 
+      {
+        result = await createEvent(userId, event, tasks);
       }
+
+      return {
+        'success': true,
+        'message': result,
+      };
+    } 
+    catch (e) {
+      return {'success': false, 'message': 'Error saving event: $e'};
     }
-
-
-  Stream<QuerySnapshot> fetchEvents(AppUser? user) {
-
-    String? userId = user!.id;
-    return _collectionRef.where('userId', isEqualTo: userId).orderBy('title').snapshots();
   }
 
+  Future<String> createEvent(String? userId, Event event, List<Task>? tasks) async {
+      // Add the event and get the document reference
+      DocumentReference docRef = await _collectionRef.add(event.toJson());
+
+      // Set the event ID
+      event.id = docRef.id;
+
+      // update the document with the ID
+      await _collectionRef
+          .doc(event.id)
+          .set(event.toJson(), SetOptions(merge: true));
+
+      if (tasks != null) {
+        for (var task in tasks) {
+          _taskServices.createTask(userId!, task, eventId: docRef.id);
+        }
+      }
+
+      return "Event created successfully";
+  }
+
+  Future<String> updateEvent(String? userId, Event event, List<Task>? tasks) async {
+      await _collectionRef.doc(event.id).set(event.toJson(), SetOptions(merge: true));
+
+      if (tasks != null) {
+        for (var task in tasks) {
+          await _taskServices.createTask(userId!, task, eventId: event.id!);
+        }
+      }
+
+      return "Event updated successfully";
+  }
+
+  Stream<QuerySnapshot> fetchEvents(AppUser? user) {
+    String? userId = user!.id;
+    return _collectionRef
+        .where('userId', isEqualTo: userId)
+        .orderBy('title')
+        .snapshots();
+  }
 
   Future<Map<String, dynamic>> deleteEvent(String? eventId) async {
     try {
+      List<Task>? eventTasks =
+          await _taskServices.fetchTasksListByEvent(eventId);
 
-      List<Task>? eventTasks = await _taskServices.fetchTasksListByEvent(eventId); 
-
-      if(eventTasks.isNotEmpty){
+      if (eventTasks.isNotEmpty) {
         for (Task task in eventTasks) {
           await _taskServices.deleteTask(task.id);
         }
       }
-
 
       await _collectionRef.doc(eventId).delete();
 
@@ -97,12 +95,8 @@ class EventServices extends ChangeNotifier {
         'success': true,
         'message': 'Event deleted',
       };
-    } 
-    catch (e) 
-    {
-      return {
-        'success': false, 
-        'message': 'Error deleting event: $e'};
+    } catch (e) {
+      return {'success': false, 'message': 'Error deleting event: $e'};
     }
   }
 }

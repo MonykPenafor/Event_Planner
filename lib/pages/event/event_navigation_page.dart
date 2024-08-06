@@ -37,9 +37,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
   @override
   void initState() {
-
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
 
     if (widget.event != null) {
 
@@ -52,10 +51,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
       _themeController.text = widget.event!.theme ?? '';
       _typeController.text = widget.event!.type ?? '';
       _sizeRatingController.text = widget.event!.sizeRating ?? '';
-
-
     }
-
   }
 
   @override
@@ -81,6 +77,9 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
       builder: (context, userServices, eventServices, taskServices, child) {
         if (userServices.appUser == null) {
           return const Center(child: CircularProgressIndicator());
+        }
+        if(widget.event != null){
+          taskServices.persistedTasks = taskServices.fetchTasksStreamByEvent(widget.event!.id);
         }
         return Scaffold(
 
@@ -114,7 +113,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
               ),
 
               EventToDoListPage(
-                  tasks: widget.event != null ? taskServices.fetchTasksStreamByEvent(widget.event!.id) : null,
+                  persistedTasks: widget.event != null ? taskServices.persistedTasks : null,
               ),
 
               EventBudgetPage(),
@@ -128,7 +127,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
               
               var eventDate = _dateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_dateController.text) : null;
 
-              final result = await eventServices.createEvent(
+              Event? e = Event(
+                id: widget.event!.id,
                 userId: userServices.appUser?.id,
                 title: _titleController.text,
                 date: eventDate,
@@ -139,26 +139,20 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                 sizeRating: _sizeRatingController.text,
                 theme: _themeController.text,
                 type: _typeController.text,
-                tasks: taskServices.tasks,
               );
+
+              final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks);
 
               if (result['success']) {
 
-                taskServices.resetTasks();
-
-                CustomSnackBar.show(context, result['message'], result['success']);
-
-                Navigator.pushNamed(context, '/mainNav');
+                taskServices.resetLocalTasks();
+                Navigator.pop(context);
               } 
-              else {
-                CustomSnackBar.show(context, result['message'], result['success']);
-              }
+
+              CustomSnackBar.show(context, result['message'], result['success']);
+            
             },
-
-
             child: const Icon(Icons.save),
-
-
           ),
         );
       },

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,9 +11,32 @@ class TaskServices extends ChangeNotifier {
 
   CollectionReference get _collectionRef => _firestore.collection("tasks");
 
-  List<Task> tasks = [];
-  List<Task> allTasks = [];
+  List<Task> localTasks = [];
+  late Stream<List<Task>> persistedTasks;
+  
+// LOCAL CHANGES
+  void addLocalTask(Task task) {
+     localTasks.add(task);
+    notifyListeners();
+  }
 
+  void removeLocalTask(int index) {
+    localTasks.removeAt(index);
+    notifyListeners();
+  }
+
+  void toggleTaskDone(int index) {
+    localTasks[index].isDone = !localTasks[index].isDone;
+    notifyListeners();
+  }
+
+  void resetLocalTasks(){
+    localTasks = [];
+  }
+
+
+
+// PERSISTED CHANGES
 
   Future<Map<String, dynamic>> createTask(String? userId, Task t, {String eventId = "General Task"}) async {
     try {
@@ -70,105 +95,20 @@ class TaskServices extends ChangeNotifier {
     return eventTasks;
   }
 
-Stream<List<Task>> fetchTasksStreamByEvent(String? eventId) async* {
-  Stream<QuerySnapshot> taskStream = _collectionRef
-      .where("eventId", isEqualTo: eventId)
-      .snapshots();
-
-  await for (QuerySnapshot snapshot in taskStream) {
-    List<Task> tasks = snapshot.docs.map((DocumentSnapshot document) {
-      return Task.fromDocument(document);
-    }).toList();
-    yield tasks;
-  }
-}
-
-
-
-
-
-
-  // Stream<QuerySnapshot> fetchTasksStreamByEvent(String? eventId) {
-
-
-  //   Stream<QuerySnapshot> taskStream = _collectionRef
-  //         .where("eventId", isEqualTo: eventId)
-  //         .snapshots();
-
-  //   taskStream.listen((QuerySnapshot snapshot) {
-  //     allTasks = snapshot.docs.map(
-  //       (DocumentSnapshot document){return Task.fromDocument(document);}).toList();
-  //       notifyListeners();
-  //   });
-
-  //   return taskStream;
-  // }
-
-
-  List<Task>? fetchSpecificsTasksAsList(String? eventId) {
-
-    List<Task>? eventTasks;
-
+  Stream<List<Task>> fetchTasksStreamByEvent(String? eventId) async* {
     Stream<QuerySnapshot> taskStream = _collectionRef
-          .where("eventId", isEqualTo: eventId)
-          .orderBy('description')
-          .snapshots();
+        .where("eventId", isEqualTo: eventId)
+        .snapshots();
 
-    taskStream.listen((QuerySnapshot snapshot) {
-      eventTasks = snapshot.docs.map((DocumentSnapshot document) {return Task.fromDocument(document);}).toList();
-      notifyListeners();
-    });
-
-    return eventTasks;
+    await for (QuerySnapshot snapshot in taskStream) {
+      List<Task> tasks = snapshot.docs.map((DocumentSnapshot document) {
+        return Task.fromDocument(document);
+      }).toList();
+      yield tasks;
+    }
   }
 
 
 
 
-  void addTask(Task task) {
-    tasks.add(task);
-    notifyListeners();
-  }
-
-  // void toggleDone(int index) {
-  //   tasks[index].isDone = !tasks[index].isDone;
-  //   notifyListeners();
-  // }
-
-  // void deleteTask(int index) {
-  //   tasks.removeAt(index);
-  //   notifyListeners();
-  // }
-
-  void resetTasks(){
-    tasks = [];
-  }
-
-
-
-  void addTask2(String? userId, Task task) {
-    createTask(userId!, task);
-    allTasks.add(task);
-    notifyListeners();
-  }
-
-  // void toggleDone2(int index) {
-  //   allTasks[index].isDone = !allTasks[index].isDone;
-  //   notifyListeners();
-  // }
-
-  // void deleteTask2(int index) {
-  //   allTasks.removeAt(index);
-  //   notifyListeners();
-  // }
-
-  // void resetAllTasks(){
-  //   allTasks = [];
-  // } 
 }
-
-
-
-
-
-
