@@ -124,33 +124,42 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
+              try{
+
+                var eventDate = _dateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_dateController.text) : null;
+
+                Event? e = Event(
+                  userId: userServices.appUser?.id,
+                  title: _titleController.text,
+                  date: eventDate,
+                  location: _locationController.text,
+                  numberOfAttendees: int.tryParse(_numberOfAttendeesController.text),
+                  description: _descriptionController.text,
+                  imageUrl: _imageUrlController.text,
+                  sizeRating: _sizeRatingController.text,
+                  theme: _themeController.text,
+                  type: _typeController.text,
+                );
+
+                if(widget.event != null){
+                  e.id = widget.event!.id;
+                }
+
+                final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks);
+
+                if (result['success']) {
+
+                  taskServices.resetLocalTasks();
+                  Navigator.pop(context);
+                } 
+
+                CustomSnackBar.show(context, result['message'], result['success']);
               
-              var eventDate = _dateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_dateController.text) : null;
-
-              Event? e = Event(
-                id: widget.event!.id,
-                userId: userServices.appUser?.id,
-                title: _titleController.text,
-                date: eventDate,
-                location: _locationController.text,
-                numberOfAttendees: int.tryParse(_numberOfAttendeesController.text),
-                description: _descriptionController.text,
-                imageUrl: _imageUrlController.text,
-                sizeRating: _sizeRatingController.text,
-                theme: _themeController.text,
-                type: _typeController.text,
-              );
-
-              final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks);
-
-              if (result['success']) {
-
-                taskServices.resetLocalTasks();
-                Navigator.pop(context);
-              } 
-
-              CustomSnackBar.show(context, result['message'], result['success']);
+              }catch (e){
+                CustomSnackBar.show(context, 'erro:$e', false);
             
+              }
+          
             },
             child: const Icon(Icons.save),
           ),

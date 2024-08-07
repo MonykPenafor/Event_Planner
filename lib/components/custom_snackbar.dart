@@ -8,7 +8,7 @@ class CustomSnackBar {
     Color snackbarColor = Colors.black;
 
     if(success != null){
-      snackbarColor = success ? Colors.green : const Color.fromARGB(255, 146, 22, 13);
+      snackbarColor = success ? const Color.fromARGB(255, 41, 43, 41) : const Color.fromARGB(255, 146, 22, 13);
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
