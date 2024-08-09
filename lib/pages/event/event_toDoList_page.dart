@@ -4,10 +4,7 @@ import '../../models/task.dart';
 import '../../services/task_services.dart';
 
 class EventToDoListPage extends StatefulWidget {
-
-  final Stream<List<Task>>? persistedTasks;
-
-  const EventToDoListPage({super.key, this.persistedTasks});
+  const EventToDoListPage({super.key});
 
   @override
   _EventToDoListPageState createState() => _EventToDoListPageState();
@@ -25,8 +22,6 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskServices>(builder: (context, taskServices, child) {
-      List<Task> tasks = taskServices.localTasks;
-
       return Scaffold(
         body: Column(
           children: [
@@ -40,83 +35,59 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       if (_textController.text.isNotEmpty) {
-                        Task task = Task(description: _textController.text);
-                        taskServices.addLocalTask(task);
-                        _textController.clear();
+                        setState(() {
+                          Task task = Task(description: _textController.text);
+                          taskServices.localTasks.add(task);
+                          _textController.clear();
+                        });
                       }
                     },
                   ),
                 ),
               ),
             ),
-            
             Expanded(
-              child: tasks.isEmpty ? const Center(child: Text('No tasks available')) : 
-                    ListView.builder(
-                      itemCount: tasks.length,
+              child: taskServices.localTasks.isEmpty
+                  ? const Center(child: Text('No tasks available'))
+                  : ListView.builder(
+                      itemCount: taskServices.localTasks.length,
                       itemBuilder: (context, index) {
-                        final task = tasks[index];
+                        var task = taskServices.localTasks[index];
                         return ListTile(
                           title: Text(
                             task.description,
                             style: TextStyle(
-                              decoration: task.isDone ? TextDecoration.lineThrough : null,
+                              decoration: task.isDone
+                                  ? TextDecoration.lineThrough
+                                  : null,
                             ),
                           ),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
-                              taskServices.removeLocalTask(index);
+                              if (task.id != null) {
+                                setState(() {
+                                  taskServices.localTasks.removeAt(index);
+                                  taskServices.deleteTask(task.id);
+                                });
+                              } else {
+                                setState(() {
+                                  taskServices.localTasks.removeAt(index);
+                                });
+                              }
                             },
                           ),
                           onTap: () {
-                            taskServices.toggleTaskDone(index);
+                            setState(() {
+                              
+                              taskServices.localTasks[index].isDone =
+                                  !taskServices.localTasks[index].isDone;
+                            });
                           },
                         );
                       },
                     ),
             ),
-          
-            if (widget.persistedTasks != null)
-              Expanded(
-                child: StreamBuilder<List<Task>>(
-                  stream: widget.persistedTasks,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return const Center(child: Text('Error loading tasks'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No tasks available'));
-                    } else {
-                      List<Task> persistedTasks = snapshot.data!;
-                      return ListView.builder(
-                        itemCount: persistedTasks.length,
-                        itemBuilder: (context, index) {
-                          final task = persistedTasks[index];
-                          return ListTile(
-                            title: Text(
-                              task.description,
-                              style: TextStyle(
-                                decoration: task.isDone ? TextDecoration.lineThrough : null,
-                              ),
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                taskServices.deleteTask(task.id);
-                              },
-                            ),
-                            onTap: () {
-                              taskServices.toggleDone(task.id);
-                            },
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ),
           ],
         ),
       );

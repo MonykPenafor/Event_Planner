@@ -12,9 +12,8 @@ class TaskServices extends ChangeNotifier {
   CollectionReference get _collectionRef => _firestore.collection("tasks");
 
   List<Task> localTasks = [];
-  late Stream<List<Task>> persistedTasks;
   
-// LOCAL CHANGES
+// LOCAL CHANGES - EVENT PAGE
   void addLocalTask(Task task) {
      localTasks.add(task);
     notifyListeners();
@@ -33,7 +32,6 @@ class TaskServices extends ChangeNotifier {
   void resetLocalTasks(){
     localTasks = [];
   }
-
 
 
 // PERSISTED CHANGES
@@ -68,6 +66,11 @@ class TaskServices extends ChangeNotifier {
     }
   }
 
+  Future<String> updateTask(String? userId, Task task) async {
+      await _collectionRef.doc(task.id).set(task.toJson(), SetOptions(merge: true));
+      return "Event updated successfully";
+  }
+
   Stream<QuerySnapshot> fetchTasks(AppUser? user) {
     String? id = user!.id;
     return _collectionRef.where('userId', isEqualTo: id).orderBy('description').snapshots();
@@ -95,20 +98,13 @@ class TaskServices extends ChangeNotifier {
     return eventTasks;
   }
 
-  Stream<List<Task>> fetchTasksStreamByEvent(String? eventId) async* {
-    Stream<QuerySnapshot> taskStream = _collectionRef
-        .where("eventId", isEqualTo: eventId)
-        .snapshots();
+  Future<void> fetchTasksByEventId(String? eventId) async {
+  final snapshot = await _collectionRef.where('eventId', isEqualTo: eventId).get();
+  localTasks = snapshot.docs.map((doc) => Task.fromDocument(doc)).toList();
+}
 
-    await for (QuerySnapshot snapshot in taskStream) {
-      List<Task> tasks = snapshot.docs.map((DocumentSnapshot document) {
-        return Task.fromDocument(document);
-      }).toList();
-      yield tasks;
-    }
+  setTasks(String? currentEventId){
+    fetchTasksByEventId(currentEventId);
   }
-
-
-
 
 }

@@ -51,7 +51,7 @@ class EventServices extends ChangeNotifier {
 
       if (tasks != null) {
         for (var task in tasks) {
-          _taskServices.createTask(userId!, task, eventId: docRef.id);
+          await _taskServices.createTask(userId!, task, eventId: docRef.id);
         }
       }
 
@@ -63,7 +63,12 @@ class EventServices extends ChangeNotifier {
 
       if (tasks != null) {
         for (var task in tasks) {
-          await _taskServices.createTask(userId!, task, eventId: event.id!);
+          if (task.id != null) {
+          _taskServices.updateTask(userId!, task);
+          }
+          else{
+          _taskServices.createTask(userId!, task, eventId: event.id!);
+          }
         }
       }
 

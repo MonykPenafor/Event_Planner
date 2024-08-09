@@ -79,7 +79,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
           return const Center(child: CircularProgressIndicator());
         }
         if(widget.event != null){
-          taskServices.persistedTasks = taskServices.fetchTasksStreamByEvent(widget.event!.id);
+          taskServices.setTasks(widget.event!.id);
         }
         return Scaffold(
 
@@ -112,9 +112,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                 typeController: _typeController,
               ),
 
-              EventToDoListPage(
-                  persistedTasks: widget.event != null ? taskServices.persistedTasks : null,
-              ),
+              EventToDoListPage(),
 
               EventBudgetPage(),
 
