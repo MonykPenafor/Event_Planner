@@ -12,6 +12,7 @@ class TaskServices extends ChangeNotifier {
   CollectionReference get _collectionRef => _firestore.collection("tasks");
 
   List<Task> localTasks = [];
+  List<Task> tasksToDetele = [];
   
 // LOCAL CHANGES - EVENT PAGE
   void addLocalTask(Task task) {
@@ -31,6 +32,7 @@ class TaskServices extends ChangeNotifier {
 
   void resetLocalTasks(){
     localTasks = [];
+    tasksToDetele = [];
   }
 
 
@@ -98,13 +100,13 @@ class TaskServices extends ChangeNotifier {
     return eventTasks;
   }
 
-  Future<void> fetchTasksByEventId(String? eventId) async {
+  Future<void> setTasksByEvent(String? eventId) async {
   final snapshot = await _collectionRef.where('eventId', isEqualTo: eventId).get();
   localTasks = snapshot.docs.map((doc) => Task.fromDocument(doc)).toList();
 }
 
-  setTasks(String? currentEventId){
-    fetchTasksByEventId(currentEventId);
+  fetchEventTasks(String? currentEventId){
+    setTasksByEvent(currentEventId);
   }
 
 }

@@ -78,8 +78,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
         if (userServices.appUser == null) {
           return const Center(child: CircularProgressIndicator());
         }
-        if(widget.event != null){
-          taskServices.setTasks(widget.event!.id);
+        if(widget.event != null && taskServices.localTasks.isEmpty){
+          taskServices.fetchEventTasks(widget.event!.id);
         }
         return Scaffold(
 
@@ -143,7 +143,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                   e.id = widget.event!.id;
                 }
 
-                final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks);
+                final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks, taskServices.tasksToDetele);
 
                 if (result['success']) {
 

@@ -35,11 +35,9 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
                     icon: const Icon(Icons.add),
                     onPressed: () {
                       if (_textController.text.isNotEmpty) {
-                        setState(() {
                           Task task = Task(description: _textController.text);
-                          taskServices.localTasks.add(task);
+                          taskServices.addLocalTask(task);
                           _textController.clear();
-                        });
                       }
                     },
                   ),
@@ -65,24 +63,15 @@ class _EventToDoListPageState extends State<EventToDoListPage> {
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {
+                              
+                              taskServices.removeLocalTask(index);
                               if (task.id != null) {
-                                setState(() {
-                                  taskServices.localTasks.removeAt(index);
-                                  taskServices.deleteTask(task.id);
-                                });
-                              } else {
-                                setState(() {
-                                  taskServices.localTasks.removeAt(index);
-                                });
+                                  taskServices.tasksToDetele.add(task);
                               }
                             },
                           ),
                           onTap: () {
-                            setState(() {
-                              
-                              taskServices.localTasks[index].isDone =
-                                  !taskServices.localTasks[index].isDone;
-                            });
+                              taskServices.toggleTaskDone(index);
                           },
                         );
                       },

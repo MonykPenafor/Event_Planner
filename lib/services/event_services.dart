@@ -13,19 +13,20 @@ class EventServices extends ChangeNotifier {
 
   final TaskServices _taskServices = TaskServices();
 
-  Future<Map<String, dynamic>> saveEvent(Event event, String? userId, List<Task> tasks) async {
+  Future<Map<String, dynamic>> saveEvent(Event event, String? userId, List<Task> tasks, List<Task> tasksToDelete) async {
     
     dynamic result;
 
     try {
       if (event.id != null) 
       {
-        result = await updateEvent(userId, event, tasks);
+        result = await updateEvent(userId, event, tasks, tasksToDelete);
       } 
       else 
       {
         result = await createEvent(userId, event, tasks);
       }
+
 
       return {
         'success': true,
@@ -58,7 +59,7 @@ class EventServices extends ChangeNotifier {
       return "Event created successfully";
   }
 
-  Future<String> updateEvent(String? userId, Event event, List<Task>? tasks) async {
+  Future<String> updateEvent(String? userId, Event event, List<Task>? tasks, List<Task>? tasksToDelete) async {
       await _collectionRef.doc(event.id).set(event.toJson(), SetOptions(merge: true));
 
       if (tasks != null) {
@@ -69,6 +70,12 @@ class EventServices extends ChangeNotifier {
           else{
           _taskServices.createTask(userId!, task, eventId: event.id!);
           }
+        }
+      }
+
+      if (tasksToDelete!.isNotEmpty) {
+        for (Task task in tasksToDelete) {
+          await _taskServices.deleteTask(task.id);
         }
       }
 

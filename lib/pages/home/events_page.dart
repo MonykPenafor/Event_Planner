@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/services/event_services.dart';
+import 'package:event_planner/services/task_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class EventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
 
       appBar: AppBar(
@@ -30,8 +32,8 @@ class EventsPage extends StatelessWidget {
           children: [
 
             Expanded(
-              child: Consumer2<UserServices, EventServices>(
-                builder: (context, userServices, eventServices,
+              child: Consumer3<UserServices, EventServices, TaskServices>(
+                builder: (context, userServices, eventServices, taskServices,
                     child) {
 
                   return StreamBuilder(
@@ -51,8 +53,7 @@ class EventsPage extends StatelessWidget {
                                 child: InkWell(borderRadius: BorderRadius.circular(8.0),
                                   onTap: () {
 
-                                    print('Card tapped');
-                                    print(_event.id);
+                                    taskServices.resetLocalTasks();
 
                                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
                                             EventNavigationPage(event: _event),
@@ -62,7 +63,6 @@ class EventsPage extends StatelessWidget {
 
                                   onLongPress: () {
                                     
-
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
