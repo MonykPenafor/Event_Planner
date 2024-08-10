@@ -40,71 +40,63 @@ class EventDetailsPage extends StatelessWidget {
                 controller: titleController,
                 labelText: 'Event Title',
                 hintText: 'Enter the title of the event',
-                prefixIcon: const Icon(Icons.event, color: Colors.blueGrey),
+                icon: Icons.event,
               ),
 
-              const SizedBox(height: 16),
               CustomDateField(
                 controller: dateController,
                 labelText: 'Event Date',
                 hintText: 'Select the date of the event',
-                prefixIcon: const Icon(Icons.calendar_today, color: Colors.blueGrey),
+                icon: Icons.calendar_today,
               ),
 
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: numberOfAttendeesController,
                 labelText: 'Number of Attendees',
                 hintText: 'Enter the number of attendees',
-                prefixIcon: const Icon(Icons.people, color: Colors.blueGrey),
+                icon: Icons.people,
               ),
 
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: locationController,
                 labelText: 'Event Location',
                 hintText: 'Enter the location of the event',
-                prefixIcon: const Icon(Icons.location_on, color: Colors.blueGrey),
+                icon: Icons.location_on,
               ),
 
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: themeController,
                 labelText: 'Event Theme',
                 hintText: 'Describe the theme of the event',
-                prefixIcon: const Icon(Icons.palette, color: Colors.blueGrey),
+                icon: Icons.palette,
               ),
 
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: imageUrlController,
                 labelText: 'Image URL',
                 hintText: 'Enter the URL for the event image',
-                prefixIcon: const Icon(Icons.image, color: Colors.blueGrey),
+                icon: Icons.image,
               ),
 
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: descriptionController,
                 labelText: 'Event Description',
                 hintText: 'Provide a brief description of the event',
-                prefixIcon: const Icon(Icons.description, color: Colors.blueGrey),
+                icon: Icons.description,
               ),
 
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: typeController,
                 labelText: 'Event Type',
                 hintText: 'Specify the type of the event (e.g., Workshop, Conference)',
-                prefixIcon: const Icon(Icons.category, color: Colors.blueGrey),
+                icon: Icons.category,
               ),
               
-              const SizedBox(height: 16),
               CustomTextField(
                 controller: sizeRatingController,
                 labelText: 'Size Rating',
                 hintText: 'Rate the expected size of the event (e.g., Small, Medium, Large)',
-                prefixIcon: const Icon(Icons.star, color: Colors.blueGrey),
+                icon: Icons.star,
               ),
             ],
           ),
