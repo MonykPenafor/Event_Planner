@@ -3,6 +3,7 @@ import 'package:event_planner/pages/event/event_navigation_page.dart';
 import 'package:event_planner/pages/home/main_navigation_page.dart';
 import 'package:event_planner/pages/login/signup_page.dart';
 import 'package:event_planner/services/event_services.dart';
+import 'package:event_planner/services/payment_services.dart';
 import 'package:event_planner/services/task_services.dart';
 import 'package:event_planner/services/user_services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => UserServices(), lazy: false,),
         ChangeNotifierProvider(create: (_) => EventServices(), lazy: false,),
-        ChangeNotifierProvider(create: (_) => TaskServices(), lazy: false,)],
+        ChangeNotifierProvider(create: (_) => TaskServices(), lazy: false,),
+        ChangeNotifierProvider(create: (_) => PaymentServices(), lazy: false,)],
       
       child: MaterialApp(
         title: 'Event Planner',

@@ -3,7 +3,7 @@ import 'package:event_planner/components/custom_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:event_planner/services/user_services.dart';
-import 'package:event_planner/widgets/password_field.dart';
+import 'package:event_planner/components/password_field.dart';
 import 'package:provider/provider.dart';
 
 

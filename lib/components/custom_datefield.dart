@@ -15,14 +15,18 @@ class CustomDateField extends StatelessWidget {
     required this.icon,
   }) : super(key: key);
 
-  Future<void> _selectDate(BuildContext context) async {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+
     final ThemeData customTheme = ThemeData(
       colorScheme: const ColorScheme.light(
-        primary: Colors.blueGrey, // Cor de fundo do cabeçalho
-        onPrimary: Colors.white, // Cor do texto do cabeçalho
-        onSurface: Colors.blueGrey, // Cor do texto do corpo
+        primary: Colors.blueGrey, 
+        onPrimary: Colors.white, 
+        onSurface: Colors.blueGrey, 
       ),
-      dialogBackgroundColor: Colors.white, // Cor de fundo do diálogo
+      dialogBackgroundColor: Colors.white, 
     );
 
     DateTime? pickedDate = await showDatePicker(
@@ -42,12 +46,8 @@ class CustomDateField extends StatelessWidget {
       String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
       controller.text = formattedDate;
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _selectDate(context),
+      },
       child: AbsorbPointer(
         child: Container(
           margin: const EdgeInsets.only(top: 10), // Margem de 5 pixels acima

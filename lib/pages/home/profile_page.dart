@@ -32,46 +32,41 @@ class ProfilePage extends StatelessWidget {
                     if (userServices.appUser == null) {
                       return const CircularProgressIndicator();
                     } else {
-                      return Card(
-                        elevation: 4.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 50.0,
-                                backgroundImage: NetworkImage(profileImageUrl),
-                              ),
-                              const SizedBox(height: 16.0),
-                              Text(
-                                userServices.appUser!.userName!,
-                                style: const TextStyle(
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                userServices.appUser!.id!,
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              const SizedBox(height: 16.0),
-                              Text(
-                                userServices.appUser!.email!,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                      return Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(
+                            colors: [Colors.blue, Colors.purple],
                           ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage: NetworkImage(profileImageUrl),
+                            ),
+                            const SizedBox(height: 16.0),
+                            Text(
+                              userServices.appUser!.userName!,
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              userServices.appUser!.email!,
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       );
                     }

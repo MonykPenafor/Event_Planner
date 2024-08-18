@@ -12,6 +12,8 @@ class Event {
   String? type;
   String? sizeRating;
   String? userId;  
+  double? budget;
+  double? serviceFee;
 
   Event(
     {
@@ -26,6 +28,8 @@ class Event {
     this.type,
     this.sizeRating,
     this.userId,
+    this.budget,
+    this.serviceFee,
   });
 
 
@@ -43,6 +47,8 @@ class Event {
       "description": description,
       "type": type,
       "sizeRating": sizeRating,
+      "budget": budget,
+      "serviceFee": serviceFee,
     };
   }
 
@@ -69,6 +75,8 @@ class Event {
     description = doc.get('description');
     type = doc.get('type');
     sizeRating = doc.get('sizeRating');
+    serviceFee = doc.get('serviceFee');
+    budget = doc.get('budget');
   }
 
 

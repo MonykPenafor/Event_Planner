@@ -1,7 +1,10 @@
+import 'dart:html';
+
 import 'package:event_planner/pages/event/event_budget_page.dart';
 import 'package:event_planner/pages/event/event_details_page.dart';
 import 'package:event_planner/pages/event/event_toDoList_page.dart';
 import 'package:event_planner/services/event_services.dart';
+import 'package:event_planner/services/payment_services.dart';
 import 'package:event_planner/services/task_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +36,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
   final TextEditingController _themeController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
   final TextEditingController _sizeRatingController = TextEditingController();
+  final TextEditingController _budgetController = TextEditingController();
+  final TextEditingController _serviceFeeController = TextEditingController();
   
 
   @override
@@ -41,6 +46,10 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
     _tabController = TabController(length: 3, vsync: this);
 
     if (widget.event != null) {
+
+
+      final paymentServices = Provider.of<PaymentServices>(context, listen: false);
+
 
       _titleController.text = widget.event!.title ?? '';
       _descriptionController.text = widget.event!.description ?? '';
@@ -51,6 +60,11 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
       _themeController.text = widget.event!.theme ?? '';
       _typeController.text = widget.event!.type ?? '';
       _sizeRatingController.text = widget.event!.sizeRating ?? '';
+      _budgetController.text = widget.event!.budget != 0 ? widget.event!.budget.toString() : '';
+      _serviceFeeController.text = widget.event!.serviceFee != 0 ? widget.event!.serviceFee.toString() : '';
+
+      paymentServices.serviceFee = widget.event!.serviceFee != 0 ? double.tryParse(_serviceFeeController.text)! : 0.00;
+      paymentServices.budget = widget.event!.budget != 0 ? double.tryParse(_budgetController.text)! : 0.00;
     }
   }
 
@@ -67,6 +81,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
     _themeController.dispose();
     _typeController.dispose();
     _sizeRatingController.dispose();
+    _budgetController.dispose();
+    _serviceFeeController.dispose();
 
     super.dispose();
   }
@@ -85,6 +101,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
           appBar: AppBar(
             title: const Text("Event Details"),
+            toolbarHeight: 30,
             bottom: TabBar(
               controller: _tabController,
               tabs: const <Widget>[
@@ -114,7 +131,10 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
               EventToDoListPage(),
 
-              EventBudgetPage(),
+              EventBudgetPage(
+                budgetController: _budgetController,
+                serviceFeeController: _serviceFeeController,
+              ),
 
             ],
           ),
@@ -137,6 +157,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                   sizeRating: _sizeRatingController.text,
                   theme: _themeController.text,
                   type: _typeController.text,
+                  budget: double.tryParse(_budgetController.text),
+                  serviceFee: double.tryParse(_budgetController.text),
                 );
 
                 if(widget.event != null){
