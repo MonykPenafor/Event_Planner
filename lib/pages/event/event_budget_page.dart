@@ -1,10 +1,14 @@
 import 'package:event_planner/components/budget_container.dart';
+import 'package:event_planner/models/payment.dart';
+import 'package:event_planner/models/payment_type_enum.dart';
 import 'package:event_planner/services/payment_services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../components/budget_mini_card.dart';
+import '../../components/custom_dropdown.dart';
+import '../../components/payment_component.dart';
+import '../../models/event_type_enum.dart';
 
 
 class EventBudgetPage extends StatefulWidget {
@@ -12,7 +16,7 @@ class EventBudgetPage extends StatefulWidget {
   final TextEditingController serviceFeeController;
 
 
-  EventBudgetPage({
+  const EventBudgetPage({
     super.key,
     required this.budgetController,
     required this.serviceFeeController,
@@ -23,10 +27,17 @@ class EventBudgetPage extends StatefulWidget {
 }
 
 class _EventBudgetPageState extends State<EventBudgetPage> {
+  final TextEditingController _paymentDescriptionController = TextEditingController();
+  final TextEditingController _paymentValueController = TextEditingController();
+  final TextEditingController _paymentImageController = TextEditingController();
+  final TextEditingController _paymentTypeController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
     
+    final paymentServices = Provider.of<PaymentServices>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -49,15 +60,13 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
                 child: Consumer<PaymentServices>(
                   builder: (context, paymentServices, child) {
                     
-                  // paymentServices.serviceFee = double.tryParse(widget.serviceFeeController.text)!;
-
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('Service Fee', style: TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold)),
                         const Spacer(),
                         Text(
-                          '\$${paymentServices.serviceFee.toStringAsFixed(2)}',
+                          '\$${paymentServices.serviceFee!.toStringAsFixed(2)}',
                           style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 10),
@@ -121,17 +130,111 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
 
             const SizedBox(height: 15),
 
+            Wrap(
+              spacing: 8.0, // Espaçamento horizontal entre os itens
+              runSpacing: 8.0, // Espaçamento vertical entre as linhas
+              children: [
+                BudgetMiniCard(icon: Icons.restaurant, label: "heyheyhey", subLabel: "hey", moneySpent: 200),
+                BudgetMiniCard(icon: Icons.restaurant, label: "hheyheyheyey", subLabel: "hey", moneySpent: 200),
+                BudgetMiniCard(icon: Icons.restaurant, label: "hey", subLabel: "hey", moneySpent: 200),
+                BudgetMiniCard(icon: Icons.restaurant, label: "hheyheyheyey", subLabel: "hey", moneySpent: 200),
+                BudgetMiniCard(icon: Icons.restaurant, label: "hey", subLabel: "hey", moneySpent: 200),
+                BudgetMiniCard(icon: Icons.restaurant, label: "hey", subLabel: "hey", moneySpent: 200),
+              ],
+            ),
+
+            const SizedBox(height: 15),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text('Payments', style: Theme.of(context).textTheme.titleLarge),
-                SizedBox(width: 7,),
+                const SizedBox(width: 7,),
                 SizedBox(
                   width: 30,
                   height: 30, 
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    titlePadding: const EdgeInsets.only(
+                                        top: 16.0, left: 16.0, right: 16.0),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text('Payment'),
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextField(
+                                          controller: _paymentDescriptionController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Description',
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 8),
+
+                                        TextField(
+                                          controller: _paymentValueController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Value',
+                                            prefixText: '\$',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                        ),
+
+                                        const SizedBox(height: 24),
+                                        
+                                        CustomDropDown<PaymentTypes>(
+                                          controller: _paymentTypeController,
+                                          dropDownItems: PaymentTypes.values,
+                                        ),
+
+                                        const SizedBox(height: 8),
+
+                                        TextField(
+                                          controller: _paymentImageController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Image URL',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text('Save'),
+                                        onPressed: () {
+                                          if (_paymentDescriptionController.text.isNotEmpty) {
+                                            
+                                            Payment payment = Payment(description: _paymentDescriptionController.text, value: double.tryParse(_paymentValueController.text), img: _paymentImageController.text, category: _paymentTypeController.text);
+
+                                            paymentServices.addLocalPayment(payment);
+                                            _paymentDescriptionController.clear();
+                                            _paymentValueController.clear();
+                                            _paymentImageController.clear();
+                                            _paymentTypeController.clear();
+                                            Navigator.of(context).pop();
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                    },
                     icon: const Icon(Icons.add),
                     iconSize: 30,
                     color: const Color.fromARGB(255, 0, 0, 0),
@@ -141,35 +244,22 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
               ],
             ),
 
-            const SizedBox(height: 16),
-            ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildPaymentItem('Venue Rental', 'Payment for venue', 1200.00, '15 Aug', Icons.location_city),
-                _buildPaymentItem('Catering', 'Food and drinks', 800.00, '16 Aug', Icons.restaurant),
-                _buildPaymentItem('Decorations', 'Event decorations', 300.00, '18 Aug', Icons.party_mode),
-                
-                BudgetMiniCard(icon: Icons.restaurant , label: "hey", subLabel: "hey", moneySpent: 200),
+             paymentServices.localPayments.isEmpty 
+              ? const Center(child: Text('No payments registered')) 
+              : ListView.builder(
+                  shrinkWrap: true, 
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: paymentServices.localPayments.length,
+                  itemBuilder: (context, index) {
+                    var payment = paymentServices.localPayments[index];
+                    return PaymentItem(payment, index, paymentServices, context, Icons.receipt);
+                  },
+                ),
 
-              ],
-            ),
           ],
         ),
       ),
     );
   }
-
-  Widget _buildPaymentItem(String title, String subtitle, double amount, String date, IconData icon) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.blue.shade50,
-        child: Icon(icon, color: Colors.blue),
-      ),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: Text('-\$${amount.toStringAsFixed(2)}', style: const TextStyle(color: Colors.red)),
-      onTap: () { },
-    );
-  }
 }
+

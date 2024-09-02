@@ -42,14 +42,19 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
   @override
   void initState() {
+
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    
+    final paymentServices = Provider.of<PaymentServices>(context, listen: false);
+    final taskServices = Provider.of<TaskServices>(context, listen: false);
+
+    paymentServices.serviceFee = 0.00;
+    paymentServices.budget = 0.00;
+    taskServices.resetLocalTasks();
+    paymentServices.resetLocalPayments();
 
     if (widget.event != null) {
-
-
-      final paymentServices = Provider.of<PaymentServices>(context, listen: false);
-
 
       _titleController.text = widget.event!.title ?? '';
       _descriptionController.text = widget.event!.description ?? '';
@@ -60,11 +65,10 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
       _themeController.text = widget.event!.theme ?? '';
       _typeController.text = widget.event!.type ?? '';
       _sizeRatingController.text = widget.event!.sizeRating ?? '';
-      _budgetController.text = widget.event!.budget != 0 ? widget.event!.budget.toString() : '';
-      _serviceFeeController.text = widget.event!.serviceFee != 0 ? widget.event!.serviceFee.toString() : '';
-
-      paymentServices.serviceFee = widget.event!.serviceFee != 0 ? double.tryParse(_serviceFeeController.text)! : 0.00;
-      paymentServices.budget = widget.event!.budget != 0 ? double.tryParse(_budgetController.text)! : 0.00;
+      _budgetController.text = '';
+      _serviceFeeController.text = '';
+      paymentServices.serviceFee = widget.event!.serviceFee ?? 0.00;
+      paymentServices.budget = widget.event!.budget ?? 0.00;
     }
   }
 
@@ -89,13 +93,16 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<UserServices, EventServices, TaskServices>(
-      builder: (context, userServices, eventServices, taskServices, child) {
+    return Consumer4<UserServices, EventServices, TaskServices, PaymentServices>(
+      builder: (context, userServices, eventServices, taskServices, paymentServices, child) {
         if (userServices.appUser == null) {
           return const Center(child: CircularProgressIndicator());
         }
         if(widget.event != null && taskServices.localTasks.isEmpty){
           taskServices.fetchEventTasks(widget.event!.id);
+        }
+        if(widget.event != null && paymentServices.localPayments.isEmpty){
+          paymentServices.fetchEventPayments(widget.event!.id);
         }
         return Scaffold(
 
@@ -144,6 +151,8 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
             onPressed: () async {
               try{
 
+                var paymentServices = Provider.of<PaymentServices>(context, listen: false);
+
                 var eventDate = _dateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_dateController.text) : null;
 
                 Event? e = Event(
@@ -157,19 +166,17 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                   sizeRating: _sizeRatingController.text,
                   theme: _themeController.text,
                   type: _typeController.text,
-                  budget: double.tryParse(_budgetController.text),
-                  serviceFee: double.tryParse(_budgetController.text),
+                  budget: paymentServices.budget,
+                  serviceFee: paymentServices.serviceFee,
                 );
 
                 if(widget.event != null){
                   e.id = widget.event!.id;
                 }
 
-                final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks, taskServices.tasksToDetele);
+                final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks, taskServices.tasksToDetele, paymentServices.localPayments, paymentServices.paymentsToDelete);
 
                 if (result['success']) {
-
-                  taskServices.resetLocalTasks();
                   Navigator.pop(context);
                 } 
 

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/models/app_user.dart';
+import 'package:event_planner/services/payment_services.dart';
 import 'package:event_planner/services/task_services.dart';
 import 'package:flutter/foundation.dart';
 import '../models/event.dart';
+import '../models/payment.dart';
 import '../models/task.dart';
 
 class EventServices extends ChangeNotifier {
@@ -12,19 +14,20 @@ class EventServices extends ChangeNotifier {
   CollectionReference get _collectionRef => _firestore.collection("events");
 
   final TaskServices _taskServices = TaskServices();
+  final PaymentServices _paymentServices = PaymentServices();
 
-  Future<Map<String, dynamic>> saveEvent(Event event, String? userId, List<Task> tasks, List<Task> tasksToDelete) async {
+  Future<Map<String, dynamic>> saveEvent(Event event, String? userId, List<Task> tasks, List<Task> tasksToDelete, List<Payment> payments, List<Payment> paymentsToDelete) async {
     
     dynamic result;
 
     try {
       if (event.id != null) 
       {
-        result = await updateEvent(userId, event, tasks, tasksToDelete);
+        result = await updateEvent(userId, event, tasks, tasksToDelete, payments, paymentsToDelete);
       } 
       else 
       {
-        result = await createEvent(userId, event, tasks);
+        result = await createEvent(userId, event, tasks, payments);
       }
 
 
@@ -38,7 +41,7 @@ class EventServices extends ChangeNotifier {
     }
   }
 
-  Future<String> createEvent(String? userId, Event event, List<Task>? tasks) async {
+  Future<String> createEvent(String? userId, Event event, List<Task>? tasks, List<Payment>? payments) async {
       // Add the event and get the document reference
       DocumentReference docRef = await _collectionRef.add(event.toJson());
 
@@ -56,10 +59,17 @@ class EventServices extends ChangeNotifier {
         }
       }
 
+      if (payments != null) {
+        for (var payment in payments) {
+          await _paymentServices.createPayment(userId!, payment, docRef.id);
+        }
+      }
+
       return "Event created successfully";
   }
 
-  Future<String> updateEvent(String? userId, Event event, List<Task>? tasks, List<Task>? tasksToDelete) async {
+  Future<String> updateEvent(String? userId, Event event, List<Task>? tasks, List<Task>? tasksToDelete, List<Payment>? payments, List<Payment>? paymentsToDelete) async {
+
       await _collectionRef.doc(event.id).set(event.toJson(), SetOptions(merge: true));
 
       if (tasks != null) {
@@ -76,6 +86,23 @@ class EventServices extends ChangeNotifier {
       if (tasksToDelete!.isNotEmpty) {
         for (Task task in tasksToDelete) {
           await _taskServices.deleteTask(task.id);
+        }
+      }
+
+      if (payments != null) {
+        for (var payment in payments) {
+          if (payment.id != null) {
+          _paymentServices.updatePayment(userId!, payment);
+          }
+          else{
+          _paymentServices.createPayment(userId!, payment, event.id!);
+          }
+        }
+      }
+
+      if (payments!.isNotEmpty) {
+        for (Payment payment in paymentsToDelete!) {
+          await _paymentServices.deletePayment(payment.id);
         }
       }
 

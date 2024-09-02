@@ -3,8 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Payment {
   String? id;
   String description;
-  double value;
+  double? value;
   String? img;
+  String? category;
   String? eventId;
   String? userId;
 
@@ -12,6 +13,7 @@ class Payment {
     this.id,
     required this.description,
     required this.value,
+    required this.category,
     this.img,
     this.eventId,
     this.userId,
@@ -22,6 +24,7 @@ class Payment {
       'id': id,
       'description': description,
       'value': value,
+      'category': category,
       'img': img,
       'eventId': eventId,
       'userId': userId,
@@ -33,6 +36,7 @@ class Payment {
         id: doc.id,
         description: doc.get('description'),
         value: doc.get('value'),
+        category: doc.get('category'),
         img: doc.get('img'),
         eventId: doc.get('eventId'),
         userId: doc.get('userId'),

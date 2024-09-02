@@ -22,11 +22,11 @@ class BudgetMiniCard extends StatelessWidget {
     double moneySpent = paymentServices.calculateMoneySpent();
 
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         gradient: const LinearGradient(
-          colors: [Color.fromARGB(255, 47, 211, 69), Color.fromARGB(255, 255, 187, 0)],
+          colors: [Color.fromARGB(255, 81, 177, 94), Color.fromARGB(255, 200, 255, 0)],
         ),
       ),
       child: Column(

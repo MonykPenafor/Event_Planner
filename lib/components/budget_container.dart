@@ -13,7 +13,6 @@ class BudgetContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paymentServices = Provider.of<PaymentServices>(context);
-    // paymentServices.budget = double.tryParse(controller.text)!;
     var  remainingBudget = paymentServices.calculateRemaining().toStringAsFixed(2);
     var  totalSpent = paymentServices.calculateSpent().toStringAsFixed(2);
 
@@ -100,7 +99,7 @@ class BudgetContainer extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    paymentServices.budget.toStringAsFixed(2),
+                    paymentServices.budget!.toStringAsFixed(2),
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 27,
@@ -121,5 +120,7 @@ class BudgetContainer extends StatelessWidget {
             ],
           )
         );
+  
+  
   }
 }
