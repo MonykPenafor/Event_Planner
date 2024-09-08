@@ -1,14 +1,13 @@
 import 'package:event_planner/components/budget_container.dart';
-import 'package:event_planner/models/payment.dart';
-import 'package:event_planner/models/payment_type_enum.dart';
 import 'package:event_planner/services/payment_services.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../components/budget_mini_card.dart';
 import '../../components/custom_dropdown.dart';
 import '../../components/payment_component.dart';
-import '../../models/event_type_enum.dart';
+import '../../models/payment.dart';
+import '../../models/payment_type_enum.dart';
 
 
 class EventBudgetPage extends StatefulWidget {
@@ -131,17 +130,36 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
             const SizedBox(height: 15),
 
             Wrap(
-              spacing: 8.0, // Espaçamento horizontal entre os itens
-              runSpacing: 8.0, // Espaçamento vertical entre as linhas
-              children: [
-                BudgetMiniCard(icon: Icons.restaurant, label: "heyheyhey", subLabel: "hey", moneySpent: 200),
-                BudgetMiniCard(icon: Icons.restaurant, label: "hheyheyheyey", subLabel: "hey", moneySpent: 200),
-                BudgetMiniCard(icon: Icons.restaurant, label: "hey", subLabel: "hey", moneySpent: 200),
-                BudgetMiniCard(icon: Icons.restaurant, label: "hheyheyheyey", subLabel: "hey", moneySpent: 200),
-                BudgetMiniCard(icon: Icons.restaurant, label: "hey", subLabel: "hey", moneySpent: 200),
-                BudgetMiniCard(icon: Icons.restaurant, label: "hey", subLabel: "hey", moneySpent: 200),
-              ],
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: paymentServices.calculateMoneySpentByPaymentType().entries.map((entry) {
+                IconData icon;
+                switch (entry.key) {
+                  case 'Catering':
+                    icon = Icons.restaurant;
+                    break;
+                  case 'Venue Rental':
+                    icon = Icons.location_city;
+                    break;
+                  case 'Decoration':
+                    icon = Icons.emoji_events;
+                    break;
+                  case 'Entertainment':
+                    icon = Icons.music_note;
+                    break;
+                  default:
+                    icon = Icons.help;
+                }
+
+                return BudgetMiniCard(
+                  icon: icon,
+                  label: entry.key, // Category
+                  // subLabel: "Total Spent",
+                  moneySpent: entry.value,
+                );
+              }).toList(),
             ),
+
 
             const SizedBox(height: 15),
 

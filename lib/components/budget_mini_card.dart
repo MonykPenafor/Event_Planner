@@ -4,23 +4,20 @@ import 'package:provider/provider.dart';
 
 class BudgetMiniCard extends StatelessWidget {
   final String label;
-  final String subLabel;
+  // final String subLabel;
   final double moneySpent;
   final IconData? icon;
 
   BudgetMiniCard({
     Key? key,
     required this.label,
-    required this.subLabel,
+    // required this.subLabel,
     required this.moneySpent,
     this.icon,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final paymentServices = Provider.of<PaymentServices>(context);
-    double moneySpent = paymentServices.calculateMoneySpent();
-
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -33,7 +30,7 @@ class BudgetMiniCard extends StatelessWidget {
         children: [
           Icon(icon),
           Text(label, style: TextStyle(color: Colors.white)),
-          Text(subLabel, style: TextStyle(color: Colors.white)),
+          // Text(subLabel, style: TextStyle(color: Colors.white)),
           Text('\$$moneySpent',
               style: const TextStyle(
                   color: Color.fromARGB(255, 236, 236, 236),

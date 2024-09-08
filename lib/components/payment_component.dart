@@ -1,4 +1,3 @@
-  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planner/services/payment_services.dart';
 import 'package:flutter/material.dart';
 
@@ -19,17 +18,17 @@ Widget PaymentItem(Payment p, int index, PaymentServices paymentServices, BuildC
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Delete Payment?'),
-              content: Text('Do you really want to delete this payment register?'),
+              title: const Text('Delete Payment?'),
+              content: const Text('Do you really want to delete this payment register?'),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: Text('Delete'),
+                  child: const Text('Delete'),
                   onPressed: () {
                     paymentServices.removeLocalPayment(index);
                     if (p.id != null) {

@@ -25,7 +25,11 @@ class PaymentServices extends ChangeNotifier {
   }
 
   double calculateSpent(){
-    return 200;
+    double moneySpent = 0;
+    for(Payment p in localPayments){
+      moneySpent = moneySpent + p.value!;
+    }
+    return moneySpent;
   }
 
   double calculateMoneySpent(){
@@ -33,11 +37,30 @@ class PaymentServices extends ChangeNotifier {
   }
 
   double calculateRemaining(){
-    var h = calculateSpent();
+    var spent = calculateSpent();
+
     if(budget != null && budget != 0){
-      return budget! - h;
+      return budget! - spent;
     }
+
     return 0;
+  }
+
+  Map<String, double> calculateMoneySpentByPaymentType(){
+    Map<String, double> map = {};
+    
+    for(Payment p in localPayments){
+      if (p.value != null) {
+
+        if (map.containsKey(p.category)) {
+          map[p.category!] = map[p.category]! + p.value!;
+
+        } else {
+          map[p.category!] = p.value!;
+        }
+      }
+    }
+    return map;
   }
 
   

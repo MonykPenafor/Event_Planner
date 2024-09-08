@@ -1,7 +1,12 @@
+import 'dart:js';
+
 import 'package:event_planner/pages/home/calendar_page.dart';
 import 'package:event_planner/pages/home/events_page.dart';
 import 'package:event_planner/pages/home/toDoList_page.dart';
+import 'package:event_planner/services/event_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../services/payment_services.dart';
 import 'analytics_page.dart';
 import 'profile_page.dart';
 
@@ -14,16 +19,17 @@ class MainNavigationPage extends StatefulWidget {
 }
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
-
+  
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: [
         EventsPage(),
         const ToDoListPage(),
-        const CalendarPage(),
+        CalendarPage(),
         AnalyticsPage(),
         ProfilePage(),
       ]

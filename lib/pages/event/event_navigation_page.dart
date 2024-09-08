@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:event_planner/pages/event/event_budget_page.dart';
 import 'package:event_planner/pages/event/event_details_page.dart';
 import 'package:event_planner/pages/event/event_toDoList_page.dart';
@@ -120,30 +118,33 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
           ),
 
 
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-
-              EventDetailsPage(
-                titleController: _titleController,
-                dateController: _dateController,
-                locationController: _locationController,
-                descriptionController: _descriptionController,
-                imageUrlController: _imageUrlController,
-                sizeRatingController: _sizeRatingController,
-                numberOfAttendeesController: _numberOfAttendeesController,
-                themeController: _themeController,
-                typeController: _typeController,
-              ),
-
-              EventToDoListPage(),
-
-              EventBudgetPage(
-                budgetController: _budgetController,
-                serviceFeeController: _serviceFeeController,
-              ),
-
-            ],
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 50.0), 
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+            
+                EventDetailsPage(
+                  titleController: _titleController,
+                  dateController: _dateController,
+                  locationController: _locationController,
+                  descriptionController: _descriptionController,
+                  imageUrlController: _imageUrlController,
+                  sizeRatingController: _sizeRatingController,
+                  numberOfAttendeesController: _numberOfAttendeesController,
+                  themeController: _themeController,
+                  typeController: _typeController,
+                ),
+            
+                EventToDoListPage(),
+            
+                EventBudgetPage(
+                  budgetController: _budgetController,
+                  serviceFeeController: _serviceFeeController,
+                ),
+            
+              ],
+            ),
           ),
 
 

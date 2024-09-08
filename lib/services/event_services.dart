@@ -119,12 +119,22 @@ class EventServices extends ChangeNotifier {
 
   Future<Map<String, dynamic>> deleteEvent(String? eventId) async {
     try {
+      
       List<Task>? eventTasks =
           await _taskServices.fetchTasksListByEvent(eventId);
 
       if (eventTasks.isNotEmpty) {
         for (Task task in eventTasks) {
           await _taskServices.deleteTask(task.id);
+        }
+      }
+
+      List<Payment>? eventPayments =
+          await _paymentServices.fetchPaymentListByEvent(eventId);
+
+      if (eventPayments.isNotEmpty) {
+        for (Payment payment in eventPayments) {
+          await _paymentServices.deletePayment(payment.id);
         }
       }
 
@@ -138,4 +148,16 @@ class EventServices extends ChangeNotifier {
       return {'success': false, 'message': 'Error deleting event: $e'};
     }
   }
+
+
+  Future<List<Event>> fetchEventsList(String? userId) async {
+    QuerySnapshot snapshot = await _collectionRef.where('userId', isEqualTo: userId)
+        .orderBy('title')
+        .get();
+
+    return snapshot.docs.map((doc) {
+      return Event.fromDocument(doc);
+    }).toList();
+  }
+
 }
