@@ -215,10 +215,13 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
                                         ),
 
                                         const SizedBox(height: 24),
-                                        
+
                                         CustomDropDown<PaymentTypes>(
                                           controller: _paymentTypeController,
                                           dropDownItems: PaymentTypes.values,
+                                          labelText: 'Select Payment Category',
+                                          hintText: 'Please select an option',
+                                          itemDescription: (type) => type.description, 
                                         ),
 
                                         const SizedBox(height: 8),

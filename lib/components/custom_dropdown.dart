@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../models/payment_type_enum.dart';
+import '../models/event_type_enum.dart';
 
 class CustomDropDown<T> extends StatefulWidget {
   final TextEditingController controller;
   final List<T> dropDownItems;
   final String hintText;
+  final String labelText;
+  final String Function(T) itemDescription;
+  final String? initialValue;
 
   const CustomDropDown({
     Key? key,
     required this.controller,
     required this.dropDownItems,
-    this.hintText = 'Please select an option',
+    required this.labelText,
+    required this.hintText,
+    required this.itemDescription,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -20,13 +26,41 @@ class CustomDropDown<T> extends StatefulWidget {
 
 class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
   T? selectedItem;
+  
+  
+    @override
+  void initState() {
+    super.initState();
+    if (T == EventType) {
+      selectedItem = _parseEventType(widget.initialValue);
+    } 
+    if (selectedItem != null) {
+      widget.controller.text = widget.itemDescription(selectedItem!);
+    }
+  }
+
+    T? _parseEventType(String? value) {
+    if (value == null) return null;
+    switch (value) {
+      case 'Wedding':
+        return EventType.weddingEvent as T;
+      case 'Birthday Party':
+        return EventType.birthdayParty as T;
+      case 'Corporate Meeting':
+        return EventType.corporateMeeting as T;
+      case 'Other':
+        return EventType.other as T;
+      default:
+        return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
       value: selectedItem,
       decoration: InputDecoration(
-        labelText: 'Select Payment Category',
+        labelText: widget.labelText,
         labelStyle: TextStyle(
           color: Colors.blueGrey[700],
           fontWeight: FontWeight.bold,
@@ -48,8 +82,8 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
       style: TextStyle(
         color: Colors.blueGrey[800],
         fontSize: 16,
-      ), 
-      hint: Text(  
+      ),
+      hint: Text(
         widget.hintText,
         style: TextStyle(
           color: Colors.blueGrey[400],
@@ -60,9 +94,7 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
         setState(() {
           selectedItem = newValue;
           widget.controller.text = selectedItem != null 
-              ? (selectedItem is PaymentTypes 
-                  ? (selectedItem as PaymentTypes).description 
-                  : selectedItem.toString()) 
+              ? widget.itemDescription(selectedItem!) 
               : '';
         });
       },
@@ -70,7 +102,7 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
         return DropdownMenuItem<T>(
           value: item,
           child: Text(
-            item is PaymentTypes ? (item as PaymentTypes).description : item.toString(),
+            widget.itemDescription(item),
             style: TextStyle(
               color: Colors.blueGrey[700],
               fontWeight: FontWeight.w500,
@@ -81,7 +113,3 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
     );
   }
 }
-
-
-
-

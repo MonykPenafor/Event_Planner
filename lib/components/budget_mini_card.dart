@@ -1,6 +1,4 @@
-import 'package:event_planner/services/payment_services.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class BudgetMiniCard extends StatelessWidget {
   final String label;

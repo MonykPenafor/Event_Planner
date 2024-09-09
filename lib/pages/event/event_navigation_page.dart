@@ -36,6 +36,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
   final TextEditingController _sizeRatingController = TextEditingController();
   final TextEditingController _budgetController = TextEditingController();
   final TextEditingController _serviceFeeController = TextEditingController();
+  String _typeInit = "";
   
 
   @override
@@ -61,12 +62,13 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
       _numberOfAttendeesController.text = widget.event!.numberOfAttendees != null ? widget.event!.numberOfAttendees.toString() : '';
       _imageUrlController.text = widget.event!.imageUrl ?? '';
       _themeController.text = widget.event!.theme ?? '';
-      _typeController.text = widget.event!.type ?? '';
       _sizeRatingController.text = widget.event!.sizeRating ?? '';
+      _typeController.text = widget.event!.type ?? '';
       _budgetController.text = '';
       _serviceFeeController.text = '';
       paymentServices.serviceFee = widget.event!.serviceFee ?? 0.00;
       paymentServices.budget = widget.event!.budget ?? 0.00;
+      _typeInit = widget.event!.type ?? '';
     }
   }
 
@@ -134,6 +136,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                   numberOfAttendeesController: _numberOfAttendeesController,
                   themeController: _themeController,
                   typeController: _typeController,
+                  typeInit: _typeInit,
                 ),
             
                 EventToDoListPage(),

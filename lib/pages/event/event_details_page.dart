@@ -1,6 +1,9 @@
+import 'package:event_planner/models/event_type_enum.dart';
 import 'package:flutter/material.dart';
 import '../../components/custom_datefield.dart';
+import '../../components/custom_dropdown.dart';
 import '../../components/custom_textfield.dart';
+import '../../models/payment_type_enum.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final TextEditingController titleController;
@@ -10,8 +13,9 @@ class EventDetailsPage extends StatefulWidget {
   final TextEditingController imageUrlController;
   final TextEditingController descriptionController;
   final TextEditingController numberOfAttendeesController;
-  final TextEditingController typeController;
   final TextEditingController sizeRatingController;
+  final TextEditingController typeController;
+  final String? typeInit;
 
   EventDetailsPage({
     super.key,
@@ -24,6 +28,7 @@ class EventDetailsPage extends StatefulWidget {
     required this.numberOfAttendeesController,
     required this.typeController,
     required this.sizeRatingController,
+    this.typeInit,
   });
 
   @override
@@ -78,11 +83,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                 icon: Icons.location_on,
               ),
 
-              CustomTextField(
+              SizedBox(height: 10,),
+
+              CustomDropDown<EventType>(
                 controller: widget.typeController,
+                dropDownItems: EventType.values,
                 labelText: 'Event Type',
-                hintText: 'Specify the type of the event (e.g., Workshop, Conference)',
-                icon: Icons.category,
+                hintText: 'Please select an option',
+                itemDescription: (type) => type.description,
+                initialValue: widget.typeInit,
               ),
 
               CustomTextField(

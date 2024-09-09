@@ -5,7 +5,6 @@ enum PaymentTypes {
   entertainment,
 }
 
-
 extension PaymentTypesExtension on PaymentTypes {
   String get description {
     switch (this) {
