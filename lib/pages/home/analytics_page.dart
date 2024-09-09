@@ -1,102 +1,92 @@
+import 'package:event_planner/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:provider/provider.dart';
 
-class AnalyticsPage extends StatelessWidget {
-  final List<charts.Series<dynamic, String>> barChartData;
-  final List<charts.Series<dynamic, DateTime>> lineChartData;
-  final bool animate;
+import '../../services/event_services.dart';
+import '../../services/user_services.dart';
 
-  // Modified constructor using initializer list for default values
-  AnalyticsPage({super.key, 
-    List<charts.Series<dynamic, String>>? barChartData,
-    List<charts.Series<dynamic, DateTime>>? lineChartData,
-    this.animate = false,
-  })  : barChartData = barChartData ?? _createBarChartData(),
-        lineChartData = lineChartData ?? _createLineChartData();
+class AnalyticsPage extends StatefulWidget {
+  @override
+  _AnalyticsPageState createState() => _AnalyticsPageState();
+}
+
+class _AnalyticsPageState extends State<AnalyticsPage> {
+  late Future<Map<String, int>> _eventCategoryCounts;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventCategoryCounts = getEventCategoryCounts();
+  }
+
+  Future<Map<String, int>> getEventCategoryCounts() async {
+    
+    Map<String, int> mapmap = {};
+
+    final eventServices = Provider.of<EventServices>(context, listen: false);
+    final userServices = Provider.of<UserServices>(context, listen: false);
+    
+    final userId = userServices.appUser?.id;
+    List<Event> firebaseEvents = await eventServices.fetchEventsList(userId);
+
+    for(Event e in firebaseEvents){
+      if (e.type != null) {
+        if (mapmap.containsKey(e.type)) {
+          mapmap[e.type!] = (mapmap[e.type!] ?? 0) + 1;
+        } else {
+          mapmap[e.type!] = 1;
+        }
+      }
+    }
+
+    return mapmap;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Event Categories"),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            const Text(
-                'Analytics',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            Expanded(
-              child: charts.BarChart(
-                barChartData,
-                animate: animate,
-              ),
-            ),
-            Expanded(
-              child: charts.TimeSeriesChart(
-                lineChartData,
-                animate: animate,
-              ),
-            ),
-          ],
+        padding: const EdgeInsets.all(16.0),
+        child: FutureBuilder<Map<String, int>>(
+          future: _eventCategoryCounts,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text("Error loading data"));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text("No data available"));
+            }
+
+            return buildCategoryPieChart(snapshot.data!);
+          },
         ),
       ),
     );
   }
 
-  // Sample data for the bar chart
-  static List<charts.Series<EventCount, String>> _createBarChartData() {
-    final data = [
-      EventCount('Conference', 5),
-      EventCount('Wedding', 8),
-      EventCount('Birthday', 3),
-    ];
-
-    return [
-      charts.Series<EventCount, String>(
-        id: 'Events',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (EventCount events, _) => events.type,
-        measureFn: (EventCount events, _) => events.count,
-        data: data,
+  Widget buildCategoryPieChart(Map<String, int> categoryData) {
+    List<charts.Series<MapEntry<String, int>, String>> seriesList = [
+      charts.Series<MapEntry<String, int>, String>(
+        id: 'Categories',
+        data: categoryData.entries.toList(),
+        domainFn: (entry, _) => entry.key, // A categoria
+        measureFn: (entry, _) => entry.value, // A quantidade
+        labelAccessorFn: (entry, _) => '${entry.key}: ${entry.value}',
+        colorFn: (_, index) => charts.MaterialPalette.blue.makeShades(categoryData.length)[index!],
       )
     ];
+
+    return charts.PieChart<String>(
+      seriesList,
+      animate: true,
+      defaultRenderer: charts.ArcRendererConfig(
+        arcRendererDecorators: [charts.ArcLabelDecorator()],
+      ),
+    );
   }
-
-  // Sample data for the line chart
-  static List<charts.Series<TimeSeriesEventCount, DateTime>> _createLineChartData() {
-    final data = [
-      TimeSeriesEventCount(DateTime(2024, 1, 1), 5),
-      TimeSeriesEventCount(DateTime(2024, 2, 1), 25),
-      TimeSeriesEventCount(DateTime(2024, 3, 1), 100),
-    ];
-
-    return [
-      charts.Series<TimeSeriesEventCount, DateTime>(
-        id: 'Monthly Events',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesEventCount event, _) => event.time,
-        measureFn: (TimeSeriesEventCount event, _) => event.count,
-        data: data,
-      )
-    ];
-  }
-}
-
-// Model class for bar chart data
-class EventCount {
-  final String type;
-  final int count;
-
-  EventCount(this.type, this.count);
-}
-
-// Model class for line chart data
-class TimeSeriesEventCount {
-  final DateTime time;
-  final int count;
-
-  TimeSeriesEventCount(this.time, this.count);
 }
