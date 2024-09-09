@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -28,17 +27,14 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Future<void> _loadFirebaseEvents() async {
     try {
-      // Obtenha os serviços de eventos e usuário do Provider
       final eventServices = Provider.of<EventServices>(context, listen: false);
       final userServices = Provider.of<UserServices>(context, listen: false);
       
       final userId = userServices.appUser?.id;
       if (userId == null) {
-        // Se o userId for nulo, não carregue os eventos
         return;
       }
 
-      // Fetch eventos do Firebase
       List<Event> firebaseEvents = await eventServices.fetchEventsList(userId);
 
       setState(() {
@@ -49,7 +45,6 @@ class _CalendarPageState extends State<CalendarPage> {
             event.date!.month,
             event.date!.day,
           );
-
           if (selectedEvents[eventDate] == null) {
             selectedEvents[eventDate] = [];
           }
@@ -61,13 +56,11 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
   
-  
   List<Event> _getEventsForDay(DateTime day) {
-  List<Event> events = selectedEvents[day] ?? [];
-  print('Events for $day: $events');
-  return events;
-}
-
+    DateTime normalizedDay = DateTime(day.year, day.month, day.day); 
+    List<Event> events = selectedEvents[normalizedDay] ?? [];
+    return events;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +103,11 @@ class _CalendarPageState extends State<CalendarPage> {
             calendarStyle: const CalendarStyle(
               isTodayHighlighted: true,
               selectedDecoration: BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
+                color: Color.fromARGB(255, 243, 117, 33),
               ),
               selectedTextStyle: TextStyle(color: Colors.white),
               todayDecoration: BoxDecoration(
-                color: Colors.purpleAccent,
-                shape: BoxShape.circle,
+                color: Color.fromARGB(255, 255, 208, 0),
               ),
             ),
 
@@ -133,7 +124,6 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
           ),
-          // Exibindo os eventos para o dia selecionado
           ..._getEventsForDay(_selectedDay).map(
             (event) => ListTile(
               title: Text(event.title ?? 'No Title'),
@@ -144,4 +134,5 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+
 }
