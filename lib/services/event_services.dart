@@ -15,6 +15,7 @@ class EventServices extends ChangeNotifier {
 
   final TaskServices _taskServices = TaskServices();
   final PaymentServices _paymentServices = PaymentServices();
+  Event event = Event(title: "General Task");
 
   Future<Map<String, dynamic>> saveEvent(Event event, String? userId, List<Task> tasks, List<Task> tasksToDelete, List<Payment> payments, List<Payment> paymentsToDelete) async {
     
@@ -159,5 +160,16 @@ class EventServices extends ChangeNotifier {
       return Event.fromDocument(doc);
     }).toList();
   }
+
+  Future<Event> fetchEventById(String? eventId) async {
+    try{
+      DocumentSnapshot doc = await _collectionRef.doc(eventId).get();
+      return Event.fromDocument(doc);
+    }
+    catch(e){
+      return event;
+    }
+  }
+
 
 }

@@ -1,9 +1,11 @@
+import 'package:event_planner/services/task_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../models/event.dart';
 import '../../services/event_services.dart';
 import '../../services/user_services.dart';
+import '../event/event_navigation_page.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -124,15 +126,62 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
           ),
-          ..._getEventsForDay(_selectedDay).map(
-            (event) => ListTile(
-              title: Text(event.title ?? 'No Title'),
-              subtitle: Text(event.description ?? 'No Description'),
+          Expanded(
+            child: ListView(
+              children: _getEventsForDay(_selectedDay).map(
+                (event) => InkWell(
+                  onTap: () {
+                    
+                    final taskServices = Provider.of<TaskServices>(context, listen: false);
+                    taskServices.resetLocalTasks();
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                            EventNavigationPage(event: event)));
+
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 20, 122, 170), // Cor viva e alegre
+                      borderRadius: BorderRadius.circular(12.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 6,
+                          offset: Offset(0, 3), // Sombra moderna
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.title ?? 'No Title',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                            color: Colors.white, 
+                          ),
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          event.description ?? 'No Description',
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ).toList(),
             ),
           ),
+
         ],
       ),
     );
   }
-
 }

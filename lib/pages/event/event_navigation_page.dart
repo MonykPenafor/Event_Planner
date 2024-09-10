@@ -108,7 +108,7 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
 
           appBar: AppBar(
             title: const Text("Event Details"),
-            toolbarHeight: 30,
+            toolbarHeight: 50,
             bottom: TabBar(
               controller: _tabController,
               tabs: const <Widget>[

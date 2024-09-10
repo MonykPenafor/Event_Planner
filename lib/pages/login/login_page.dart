@@ -63,16 +63,16 @@ class LoginPage extends StatelessWidget {
                         },
                       ),
 
-                      Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: const Text( 'Forgot password?',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 21, 0, 70),
-                              fontWeight: FontWeight.w700
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   alignment: Alignment.centerRight,
+                      //   padding: const EdgeInsets.only(top: 8.0),
+                      //   child: const Text( 'Forgot password?',
+                      //     style: TextStyle(
+                      //         color: Color.fromARGB(255, 21, 0, 70),
+                      //         fontWeight: FontWeight.w700
+                      //     ),
+                      //   ),
+                      // ),
 
                       const SizedBox(height: 25,),
 
