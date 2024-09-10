@@ -140,57 +140,54 @@ class _EventNavigationPageState extends State<EventNavigationPage> with SingleTi
                 ),
             
                 EventToDoListPage(),
-            
+
                 EventBudgetPage(
                   budgetController: _budgetController,
                   serviceFeeController: _serviceFeeController,
                 ),
-            
               ],
             ),
           ),
 
-
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              try{
+              if(_descriptionController.text.isNotEmpty && _titleController.text.isNotEmpty && _typeController.text.isNotEmpty && _dateController.text.isNotEmpty){
+                try{
 
-                var paymentServices = Provider.of<PaymentServices>(context, listen: false);
+                  var paymentServices = Provider.of<PaymentServices>(context, listen: false);
+                  var eventDate = _dateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_dateController.text) : null;
 
-                var eventDate = _dateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_dateController.text) : null;
+                  Event? e = Event(
+                    userId: userServices.appUser?.id,
+                    title: _titleController.text,
+                    date: eventDate,
+                    location: _locationController.text,
+                    numberOfAttendees: int.tryParse(_numberOfAttendeesController.text),
+                    description: _descriptionController.text,
+                    imageUrl: _imageUrlController.text,
+                    sizeRating: _sizeRatingController.text,
+                    theme: _themeController.text,
+                    type: _typeController.text,
+                    budget: paymentServices.budget,
+                    serviceFee: paymentServices.serviceFee,
+                  );
 
-                Event? e = Event(
-                  userId: userServices.appUser?.id,
-                  title: _titleController.text,
-                  date: eventDate,
-                  location: _locationController.text,
-                  numberOfAttendees: int.tryParse(_numberOfAttendeesController.text),
-                  description: _descriptionController.text,
-                  imageUrl: _imageUrlController.text,
-                  sizeRating: _sizeRatingController.text,
-                  theme: _themeController.text,
-                  type: _typeController.text,
-                  budget: paymentServices.budget,
-                  serviceFee: paymentServices.serviceFee,
-                );
+                  if(widget.event != null){
+                    e.id = widget.event!.id;
+                  }
+                  final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks, taskServices.tasksToDetele, paymentServices.localPayments, paymentServices.paymentsToDelete);
 
-                if(widget.event != null){
-                  e.id = widget.event!.id;
+                  if (result['success']) {
+                    Navigator.pop(context);
+                  } 
+                  CustomSnackBar.show(context, result['message'], result['success']);
+                }catch (e){
+                  CustomSnackBar.show(context, 'erro:$e', false);
                 }
-
-                final result = await eventServices.saveEvent(e, userServices.appUser?.id, taskServices.localTasks, taskServices.tasksToDetele, paymentServices.localPayments, paymentServices.paymentsToDelete);
-
-                if (result['success']) {
-                  Navigator.pop(context);
-                } 
-
-                CustomSnackBar.show(context, result['message'], result['success']);
-              
-              }catch (e){
-                CustomSnackBar.show(context, 'erro:$e', false);
-            
               }
-          
+              else{
+                CustomSnackBar.show(context, "Title, description, type and date are required", false);
+              }
             },
             child: const Icon(Icons.save),
           ),

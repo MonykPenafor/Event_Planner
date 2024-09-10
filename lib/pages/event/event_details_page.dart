@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../components/custom_datefield.dart';
 import '../../components/custom_dropdown.dart';
 import '../../components/custom_textfield.dart';
-import '../../models/payment_type_enum.dart';
 
 class EventDetailsPage extends StatefulWidget {
   final TextEditingController titleController;

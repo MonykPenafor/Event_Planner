@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/budget_mini_card.dart';
 import '../../components/custom_dropdown.dart';
+import '../../components/custom_snackbar.dart';
 import '../../components/payment_component.dart';
 import '../../models/payment.dart';
 import '../../models/payment_type_enum.dart';
@@ -30,7 +31,6 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
   final TextEditingController _paymentValueController = TextEditingController();
   final TextEditingController _paymentImageController = TextEditingController();
   final TextEditingController _paymentTypeController = TextEditingController();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,7 @@ class _EventBudgetPageState extends State<EventBudgetPage> {
                                       TextButton(
                                         child: const Text('Save'),
                                         onPressed: () {
-                                          if (_paymentDescriptionController.text.isNotEmpty) {
+                                          if (_paymentDescriptionController.text.isNotEmpty && _paymentImageController.text.isNotEmpty && _paymentTypeController.text.isNotEmpty && _paymentValueController.text.isNotEmpty) {
                                             
                                             Payment payment = Payment(description: _paymentDescriptionController.text, value: double.tryParse(_paymentValueController.text), img: _paymentImageController.text, category: _paymentTypeController.text);
 
