@@ -44,7 +44,7 @@ With Event Planner, users can:
 
 ## Screenshots
 
-Screenshots of the application can be found [here](assets/images).
+Screenshots of the application can be found [here](assets/images/appScreenshots.md).
 
 ## Getting Started
 
