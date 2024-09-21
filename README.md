@@ -1,5 +1,5 @@
 # Event Planner - Flutter Mobile App
-[screeshots here](assets/images/appScreenshots.md) and main code [here](lib)
+[screeshots here](assets/images/appScreenshots.md), main code [here](lib) and documentation and sequence diagrams [here](DOCS)
 
 ## Description
 
