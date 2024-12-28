@@ -1,0 +1,46 @@
+projeto de flutter com firebase steps
+
+no vs code:
+abrir paleta de comandos (ctrl + shift + p)
+flutter new project
+application
+
+
+google:
+firebase (https://firebase.google.com/?hl=pt)
+fazer login
+go to console (https://console.firebase.google.com/u/0/?hl=pt)
+add projeto
+nome projeto
+ativar google analytics
+continuar
+
+
+vincular app com firebase:
+ir no icone de dev (web)
+colocar nome do projeto
+usar a tag script 
+copiar texto
+colar debaixo(dentro) da tag body do index.html do dir web
+
+
+habilitando acesso aos dados:
+no console de firebase:
+ - add authentication (email, redes sociais)
+ - add cloud firestore (modo teste por agora)
+
+no vscode:
+ir ate pubspec.yaml
+add dependencias do firebase 
+
+		''dependencies:
+  		firebase_auth: ^4.17.5
+  		cloud_firestore: ^4.15.5
+  		firebase_core: ^2.25.4
+  		firebase_storage: ^11.6.6
+  		flutter:
+    		  sdk: flutter
+		''
+
+
+
